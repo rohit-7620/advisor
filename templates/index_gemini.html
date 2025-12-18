@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerNexus : AI Based Personalised Career Advisor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            --danger-gradient: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 100px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="rgba(255,255,255,0.1)" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,112C672,96,768,96,864,112C960,128,1056,160,1152,160C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>') no-repeat bottom;
+            background-size: cover;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--primary-gradient);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            margin-bottom: 20px;
+            background: var(--primary-gradient);
+            color: white;
+        }
+        
+        .btn-gradient {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .modal-content {
+            border-radius: 20px;
+            border: none;
+        }
+        
+        .modal-header {
+            background: var(--primary-gradient);
+            color: white;
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            background: var(--success-gradient);
+            color: white;
+            margin: 0 auto;
+        }
+        
+        .skill-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin: 5px;
+            display: inline-block;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 50px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            border: 4px solid white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 19px;
+            top: 20px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background: linear-gradient(to bottom, #667eea, transparent);
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .ats-score {
+            font-size: 48px;
+            font-weight: bold;
+            background: var(--success-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-pills .nav-link {
+            border-radius: 50px;
+            margin: 0 5px;
+            padding: 12px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-pills .nav-link.active {
+            background: var(--primary-gradient);
+        }
+        
+        .chat-interface {
+            height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 18px;
+            border-radius: 18px;
+            max-width: 80%;
+        }
+        
+        .message.user {
+            background: var(--primary-gradient);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .message.ai {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .progress-bar-animated {
+            background: var(--primary-gradient);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section" data-aos="fade-down" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 90vh; display: flex; align-items: center;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="badge bg-light text-primary mb-3 px-4 py-2 fs-6">
+                        <i class="fas fa-sparkles me-2"></i>Powered by Google Gemini AI
+                    </div>
+                    <h1 class="display-2 fw-bold mb-4" style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); animation: slide-up 0.8s ease-out;">Career<span class="gradient-text" style="-webkit-text-fill-color: white; text-shadow: 0 0 30px rgba(255,255,255,0.5);">Nexus</span></h1>
+                    <p class="lead mb-4" style="color: rgba(255,255,255,0.95); font-size: 1.3rem; animation: slide-up 0.8s ease-out 0.2s backwards;">Your AI-Powered Career Companion. Get personalized insights, optimize your resume, ace interviews, and unlock your career potential.</p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <div class="d-flex align-items-center bg-white bg-opacity-25 px-3 py-2 rounded" style="backdrop-filter: blur(10px); animation: slide-up 0.6s ease-out 0.3s backwards; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.1)'; this.style.backgroundColor='rgba(255,255,255,0.35)'" onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='rgba(255,255,255,0.25)'">
+                            <i class="fas fa-robot me-2 fs-5" style="color: white;"></i>
+                            <span style="color: white; font-weight: 500;">AI-Powered</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-white bg-opacity-25 px-3 py-2 rounded" style="backdrop-filter: blur(10px); animation: slide-up 0.6s ease-out 0.4s backwards; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.1)'; this.style.backgroundColor='rgba(255,255,255,0.35)'" onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='rgba(255,255,255,0.25)'">
+                            <i class="fas fa-chart-line me-2 fs-5" style="color: white;"></i>
+                            <span style="color: white; font-weight: 500;">Career Insights</span>
+                        </div>
+                        <div class="d-flex align-items-center bg-white bg-opacity-25 px-3 py-2 rounded" style="backdrop-filter: blur(10px); animation: slide-up 0.6s ease-out 0.5s backwards; transition: all 0.3s;" onmouseover="this.style.transform='scale(1.1)'; this.style.backgroundColor='rgba(255,255,255,0.35)'" onmouseout="this.style.transform='scale(1)'; this.style.backgroundColor='rgba(255,255,255,0.25)'">
+                            <i class="fas fa-briefcase me-2 fs-5" style="color: white;"></i>
+                            <span style="color: white; font-weight: 500;">10+ Features</span>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-3" style="animation: slide-up 0.6s ease-out 0.6s backwards;">
+                        <button class="btn btn-light btn-lg px-5 shadow-lg" onclick="scrollToFeatures()" style="border-radius: 50px; font-weight: 600; position: relative; overflow: hidden; transition: all 0.3s;">
+                            <i class="fas fa-rocket me-2" style="display: inline-block; transition: transform 0.3s;"></i>Get Started
+                        </button>
+                        <button class="btn btn-outline-light btn-lg px-4 shadow" onclick="scrollToFeatures()" style="border-radius: 50px; border-width: 2px; transition: all 0.3s;" onmouseover="this.querySelector('i').style.transform='rotate(360deg)'" onmouseout="this.querySelector('i').style.transform='rotate(0deg)'">
+                            <i class="fas fa-play-circle me-2" style="display: inline-block; transition: transform 0.5s;"></i>Explore
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
+                    <div style="position: relative; animation: float 3s ease-in-out infinite;">
+                        <!-- Glowing background circle -->
+                        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%); border-radius: 50%; animation: pulse 2s ease-in-out infinite;"></div>
+                        
+                        <!-- Main AI Icon -->
+                        <div style="position: relative; z-index: 2;">
+                            <svg width="400" height="400" viewBox="0 0 400 400" style="filter: drop-shadow(0 20px 40px rgba(0,0,0,0.3));">
+                                <!-- Rotating outer ring -->
+                                <circle cx="200" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="3" stroke-dasharray="10 5" style="animation: rotate 20s linear infinite;">
+                                    <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="20s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <!-- Inner rotating ring -->
+                                <circle cx="200" cy="200" r="120" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" stroke-dasharray="5 3" style="animation: rotate-reverse 15s linear infinite;">
+                                    <animateTransform attributeName="transform" type="rotate" from="360 200 200" to="0 200 200" dur="15s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <!-- Center AI Brain -->
+                                <g transform="translate(200, 200)">
+                                    <!-- Brain container -->
+                                    <ellipse cx="0" cy="0" rx="90" ry="100" fill="url(#brainGradient)" opacity="0.9"/>
+                                    
+                                    <!-- Neural network lines -->
+                                    <g opacity="0.8">
+                                        <line x1="-40" y1="-30" x2="40" y2="30" stroke="#fff" stroke-width="2" opacity="0.6">
+                                            <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+                                        </line>
+                                        <line x1="40" y1="-30" x2="-40" y2="30" stroke="#fff" stroke-width="2" opacity="0.6">
+                                            <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
+                                        </line>
+                                        <line x1="0" y1="-50" x2="0" y2="50" stroke="#fff" stroke-width="2" opacity="0.6">
+                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
+                                        </line>
+                                    </g>
+                                    
+                                    <!-- Nodes -->
+                                    <circle cx="-40" cy="-30" r="8" fill="#fff">
+                                        <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="40" cy="-30" r="8" fill="#fff">
+                                        <animate attributeName="r" values="10;6;10" dur="2s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="-40" cy="30" r="8" fill="#fff">
+                                        <animate attributeName="r" values="7;11;7" dur="1.8s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="40" cy="30" r="8" fill="#fff">
+                                        <animate attributeName="r" values="11;7;11" dur="1.8s" repeatCount="indefinite"/>
+                                    </circle>
+                                    <circle cx="0" cy="0" r="12" fill="#fff">
+                                        <animate attributeName="r" values="10;14;10" dur="1.5s" repeatCount="indefinite"/>
+                                    </circle>
+                                </g>
+                                
+                                <!-- Orbiting particles -->
+                                <circle cx="200" cy="50" r="6" fill="#fff" opacity="0.8">
+                                    <animateTransform attributeName="transform" type="rotate" from="0 200 200" to="360 200 200" dur="8s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="200" cy="350" r="6" fill="#fff" opacity="0.8">
+                                    <animateTransform attributeName="transform" type="rotate" from="180 200 200" to="540 200 200" dur="8s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="50" cy="200" r="6" fill="#fff" opacity="0.8">
+                                    <animateTransform attributeName="transform" type="rotate" from="90 200 200" to="450 200 200" dur="8s" repeatCount="indefinite"/>
+                                </circle>
+                                <circle cx="350" cy="200" r="6" fill="#fff" opacity="0.8">
+                                    <animateTransform attributeName="transform" type="rotate" from="270 200 200" to="630 200 200" dur="8s" repeatCount="indefinite"/>
+                                </circle>
+                                
+                                <!-- Gradient definition -->
+                                <defs>
+                                    <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#e0e7ff;stop-opacity:1" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                        
+                        <!-- Floating text particles -->
+                        <div style="position: absolute; top: 20%; left: 10%; color: white; font-size: 12px; opacity: 0.6; animation: float-text 4s ease-in-out infinite;">AI</div>
+                        <div style="position: absolute; top: 70%; right: 15%; color: white; font-size: 12px; opacity: 0.6; animation: float-text 3s ease-in-out infinite 1s;">ML</div>
+                        <div style="position: absolute; top: 40%; right: 5%; color: white; font-size: 12px; opacity: 0.6; animation: float-text 3.5s ease-in-out infinite 0.5s;">Neural</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes rotate-reverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+        @keyframes float-text {
+            0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.4; }
+            50% { transform: translateY(-10px) translateX(5px); opacity: 0.8; }
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        @keyframes bounce-in {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes slide-up {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.8), 0 0 60px rgba(118, 75, 162, 0.6); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes fade-in-scale {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(20deg); }
+            75% { transform: rotate(-20deg); }
+        }
+        
+        .btn-gradient:hover, .btn-light:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
+            transition: all 0.3s ease;
+            animation: glow 2s ease-in-out infinite;
+        }
+        .btn-outline-light:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        /* Feature Card Animations */
+        .feature-card {
+            animation: fade-in-scale 0.6s ease-out forwards;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .feature-card:hover {
+            animation: glow 2s ease-in-out infinite;
+        }
+        .feature-card:hover .feature-icon {
+            animation: bounce-in 0.6s ease, spin-slow 3s linear infinite;
+        }
+        
+        /* Gradient Text Animation */
+        .gradient-text {
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #667eea);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+        }
+        
+        /* Animated Background Particles */
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 0%, transparent 50%);
+            animation: pulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        /* Badge Pulse */
+        .badge {
+            animation: bounce-in 0.8s ease-out;
+        }
+        
+        /* Icon Hover Wave */
+        .feature-icon i {
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover .feature-icon i {
+            animation: wave 0.5s ease;
+        }
+        
+        /* Shimmer Effect on Hover */
+        .btn-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        .btn-gradient:hover::before {
+            left: 100%;
+        }
+    </style>
+
+    <!-- Features Section -->
+    <div class="container my-5 py-5" id="features" style="margin-top: -50px !important;">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <span class="badge bg-gradient text-white mb-3 px-4 py-2 fs-6" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); animation: bounce-in 0.8s ease-out;">
+                <i class="fas fa-star me-2" style="animation: spin-slow 4s linear infinite;"></i>10 Powerful AI Tools
+            </span>
+            <h2 class="display-4 fw-bold mb-3" style="animation: slide-up 0.8s ease-out;">Revolutionary <span class="gradient-text">Features</span></h2>
+            <p class="lead text-muted" style="animation: slide-up 0.8s ease-out 0.2s backwards;">Everything you need to accelerate your career growth</p>
+        </div>
+        
+        <div class="row">
+            <!-- ATS Resume Generator -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-file-invoice"></i>
+                    </div>
+                    <h4 class="mb-3">ATS-Optimized Resume</h4>
+                    <p class="text-muted">Generate professional resumes that pass Applicant Tracking Systems with 95%+ success rate.</p>
+                    <button class="btn btn-gradient" onclick="openATSResumeModal()">
+                        Create Resume <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cover Letter Generator -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-envelope-open-text"></i>
+                    </div>
+                    <h4 class="mb-3">Smart Cover Letter</h4>
+                    <p class="text-muted">AI-generated cover letters tailored to specific job descriptions and company culture.</p>
+                    <button class="btn btn-gradient" onclick="openCoverLetterModal()">
+                        Generate Letter <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- LinkedIn Optimizer -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <h4 class="mb-3">LinkedIn Optimizer</h4>
+                    <p class="text-muted">Analyze and optimize your LinkedIn profile for maximum visibility and recruiter engagement.</p>
+                    <button class="btn btn-gradient" onclick="openLinkedInModal()">
+                        Optimize Profile <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mock Interview -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h4 class="mb-3">AI Mock Interview</h4>
+                    <p class="text-muted">Practice with AI-powered interviews and get real-time feedback on your answers.</p>
+                    <button class="btn btn-gradient" onclick="openMockInterviewModal()">
+                        Start Interview <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Career Trajectory -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="500">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-road"></i>
+                    </div>
+                    <h4 class="mb-3">Career Prediction</h4>
+                    <p class="text-muted">AI predicts your 5-year career trajectory with multiple path options and salary estimates.</p>
+                    <button class="btn btn-gradient" onclick="openCareerTrajectoryModal()">
+                        Predict Career <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Skill Gap Analysis -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="600">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h4 class="mb-3">Skill Gap Analysis</h4>
+                    <p class="text-muted">Identify skill gaps and get personalized learning recommendations with timelines.</p>
+                    <button class="btn btn-gradient" onclick="openSkillGapModal()">
+                        Analyze Skills <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Salary Negotiation -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="700">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h4 class="mb-3">Salary Negotiation</h4>
+                    <p class="text-muted">Get data-driven salary negotiation strategies with market benchmarks and scripts.</p>
+                    <button class="btn btn-gradient" onclick="openSalaryModal()">
+                        Negotiate Smart <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Job Analysis -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="800">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h4 class="mb-3">Job Description AI</h4>
+                    <p class="text-muted">Deep analysis of job descriptions with hidden requirements and application strategies.</p>
+                    <button class="btn btn-gradient" onclick="openJobAnalysisModal()">
+                        Analyze Job <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Learning Path -->
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="900">
+                <div class="feature-card text-center">
+                    <div class="feature-icon mx-auto">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <h4 class="mb-3">Learning Roadmap</h4>
+                    <p class="text-muted">Personalized learning paths with week-by-week curriculum and resource recommendations.</p>
+                    <button class="btn btn-gradient" onclick="openLearningPathModal()">
+                        Create Path <i class="fas fa-arrow-right ms-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="zoom-in">
+                    <div class="stat-number">95%</div>
+                    <div class="text-muted">ATS Pass Rate</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="zoom-in" data-aos-delay="100">
+                    <div class="stat-number">50K+</div>
+                    <div class="text-muted">Resumes Generated</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="zoom-in" data-aos-delay="200">
+                    <div class="stat-number">85%</div>
+                    <div class="text-muted">Interview Success</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-card" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="stat-number">30%</div>
+                    <div class="text-muted">Avg Salary Increase</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals will be added dynamically -->
+    <div id="modal-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true
+        });
+
+        function scrollToFeatures() {
+            const featuresSection = document.getElementById('features');
+            if (featuresSection) {
+                const yOffset = -80; // Offset for better viewing
+                const y = featuresSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                window.scrollTo({top: y, behavior: 'smooth'});
+                
+                // Add a subtle highlight effect
+                featuresSection.style.transition = 'all 0.3s ease';
+                featuresSection.style.transform = 'scale(1.02)';
+                setTimeout(() => {
+                    featuresSection.style.transform = 'scale(1)';
+                }, 300);
+            }
+        }
+
+        // API Base URL
+        const API_URL = 'http://localhost:5000/api/gemini';
+
+        // Modal Functions
+        function openATSResumeModal() {
+            showModal('ATS-Optimized Resume Generator', getATSResumeForm());
+        }
+
+        function openCoverLetterModal() {
+            showModal('Smart Cover Letter Generator', getCoverLetterForm());
+        }
+
+        function openLinkedInModal() {
+            showModal('LinkedIn Profile Optimizer', getLinkedInForm());
+        }
+
+        function openMockInterviewModal() {
+            showModal('AI Mock Interview', getMockInterviewForm());
+        }
+
+        function openCareerTrajectoryModal() {
+            showModal('5-Year Career Prediction', getCareerTrajectoryForm());
+        }
+
+        function openSkillGapModal() {
+            showModal('Skill Gap Analysis', getSkillGapForm());
+        }
+
+        function openSalaryModal() {
+            showModal('Salary Negotiation Strategy', getSalaryForm());
+        }
+
+        function openJobAnalysisModal() {
+            showModal('Job Description Analysis', getJobAnalysisForm());
+        }
+
+        function openLearningPathModal() {
+            showModal('Personalized Learning Path', getLearningPathForm());
+        }
+
+        function showModal(title, content) {
+            const modalHTML = `
+                <div class="modal fade" id="dynamicModal" tabindex="-1">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title"><i class="fas fa-robot me-2"></i>${title}</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                ${content}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modal-container').innerHTML = modalHTML;
+            const modal = new bootstrap.Modal(document.getElementById('dynamicModal'));
+            modal.show();
+        }
+
+        function getATSResumeForm() {
+            return `
+                <form id="atsResumeForm" onsubmit="generateATSResume(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Target Role</label>
+                        <input type="text" class="form-control" name="target_role" placeholder="e.g., Senior Software Engineer" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Skills (comma-separated)</label>
+                        <textarea class="form-control" name="skills" rows="2" placeholder="Python, React, AWS, etc." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Education</label>
+                        <textarea class="form-control" name="education" rows="2" placeholder="B.Tech in Computer Science, IIT Delhi, 2020" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Experience (brief description)</label>
+                        <textarea class="form-control" name="experience" rows="3" placeholder="3 years at Google as Software Engineer..." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Key Achievements</label>
+                        <textarea class="form-control" name="achievements" rows="3" placeholder="Led team of 5, Improved performance by 40%, etc."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-magic me-2"></i>Generate ATS Resume
+                    </button>
+                </form>
+                <div id="atsResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getCoverLetterForm() {
+            return `
+                <form id="coverLetterForm" onsubmit="generateCoverLetter(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Your Skills</label>
+                        <input type="text" class="form-control" name="skills" placeholder="Python, Machine Learning, etc." required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Experience (years)</label>
+                        <input type="number" class="form-control" name="experience_years" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Current Role</label>
+                        <input type="text" class="form-control" name="current_role" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Job Description</label>
+                        <textarea class="form-control" name="job_description" rows="6" placeholder="Paste the job description here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-file-alt me-2"></i>Generate Cover Letter
+                    </button>
+                </form>
+                <div id="coverLetterResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getLinkedInForm() {
+            return `
+                <form id="linkedinForm" onsubmit="analyzeLinkedIn(event)">
+                    <div class="mb-3">
+                        <label class="form-label">LinkedIn Headline</label>
+                        <input type="text" class="form-control" name="headline" placeholder="Your current headline" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">About Section</label>
+                        <textarea class="form-control" name="about" rows="4" placeholder="Your current about section" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Skills (comma-separated)</label>
+                        <textarea class="form-control" name="skills" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Experience Summary</label>
+                        <textarea class="form-control" name="experience" rows="3" placeholder="Brief summary of your experience" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fab fa-linkedin me-2"></i>Optimize Profile
+                    </button>
+                </form>
+                <div id="linkedinResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getMockInterviewForm() {
+            return `
+                <form id="mockInterviewForm" onsubmit="startMockInterview(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <input type="text" class="form-control" name="role" placeholder="e.g., Software Engineer" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Difficulty Level</label>
+                        <select class="form-select" name="difficulty" required>
+                            <option value="easy">Easy</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-play me-2"></i>Start Interview
+                    </button>
+                </form>
+                <div id="interviewResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getCareerTrajectoryForm() {
+            return `
+                <form id="careerForm" onsubmit="predictCareer(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Current Role</label>
+                        <input type="text" class="form-control" name="current_role" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Experience (years)</label>
+                        <input type="number" class="form-control" name="experience_years" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Skills (comma-separated)</label>
+                        <textarea class="form-control" name="skills" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Industry</label>
+                        <input type="text" class="form-control" name="industry" placeholder="e.g., Technology" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Career Goals</label>
+                        <textarea class="form-control" name="career_goals" rows="2" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-crystal-ball me-2"></i>Predict Career Path
+                    </button>
+                </form>
+                <div id="careerResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getSkillGapForm() {
+            return `
+                <form id="skillGapForm" onsubmit="analyzeSkillGap(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Current Skills (comma-separated)</label>
+                        <textarea class="form-control" name="current_skills" rows="3" placeholder="Python, JavaScript, React, etc." required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Target Role</label>
+                        <input type="text" class="form-control" name="target_role" placeholder="e.g., Full Stack Developer" required>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-chart-line me-2"></i>Analyze Skill Gaps
+                    </button>
+                </form>
+                <div id="skillGapResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getSalaryForm() {
+            return `
+                <form id="salaryForm" onsubmit="getSalaryStrategy(event)">
+                    <h6 class="mb-3">Your Profile</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Current Salary (₹)</label>
+                        <input type="number" class="form-control" name="current_salary" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Experience (years)</label>
+                        <input type="number" class="form-control" name="experience_years" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Skills</label>
+                        <input type="text" class="form-control" name="skills" required>
+                    </div>
+                    <hr>
+                    <h6 class="mb-3">Job Offer Details</h6>
+                    <div class="mb-3">
+                        <label class="form-label">Offered Salary (₹)</label>
+                        <input type="number" class="form-control" name="offered_salary" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <input type="text" class="form-control" name="role" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Company</label>
+                        <input type="text" class="form-control" name="company" required>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-calculator me-2"></i>Get Negotiation Strategy
+                    </button>
+                </form>
+                <div id="salaryResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getJobAnalysisForm() {
+            return `
+                <form id="jobAnalysisForm" onsubmit="analyzeJob(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Job Description</label>
+                        <textarea class="form-control" name="job_description" rows="10" placeholder="Paste the complete job description here..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-search-plus me-2"></i>Analyze Job Description
+                    </button>
+                </form>
+                <div id="jobAnalysisResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        function getLearningPathForm() {
+            return `
+                <form id="learningPathForm" onsubmit="createLearningPath(event)">
+                    <div class="mb-3">
+                        <label class="form-label">Current Skills</label>
+                        <textarea class="form-control" name="skills" rows="2" placeholder="List your current skills" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Learning Goal</label>
+                        <input type="text" class="form-control" name="goal" placeholder="e.g., Become a Full Stack Developer" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Hours Available per Week</label>
+                        <input type="number" class="form-control" name="hours_per_week" value="10" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Budget (₹)</label>
+                        <input type="number" class="form-control" name="budget" value="10000">
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-route me-2"></i>Create Learning Path
+                    </button>
+                </form>
+                <div id="learningPathResult" class="mt-4" style="display:none;"></div>
+            `;
+        }
+
+        // API Functions
+        async function generateATSResume(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                name: formData.get('name'),
+                target_role: formData.get('target_role'),
+                skills: formData.get('skills').split(',').map(s => s.trim()),
+                education: formData.get('education'),
+                experience: [formData.get('experience')],
+                achievements: formData.get('achievements').split(',').map(s => s.trim())
+            };
+            
+            showLoading('atsResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/ats-resume`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displayATSResult(result);
+            } catch (error) {
+                showError('atsResult', error.message);
+            }
+        }
+
+        async function generateCoverLetter(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                user_data: {
+                    name: formData.get('name'),
+                    skills: formData.get('skills').split(',').map(s => s.trim()),
+                    experience_years: formData.get('experience_years'),
+                    current_role: formData.get('current_role')
+                },
+                job_description: formData.get('job_description')
+            };
+            
+            showLoading('coverLetterResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/cover-letter`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displayCoverLetter(result);
+            } catch (error) {
+                showError('coverLetterResult', error.message);
+            }
+        }
+
+        async function analyzeLinkedIn(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                headline: formData.get('headline'),
+                about: formData.get('about'),
+                skills: formData.get('skills').split(',').map(s => s.trim()),
+                experience: [formData.get('experience')]
+            };
+            
+            console.log('Sending LinkedIn data:', data);
+            showLoading('linkedinResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/linkedin-analysis`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('LinkedIn analysis result:', result);
+                
+                if (!result.success) {
+                    showError('linkedinResult', result.error || 'Analysis failed');
+                    return;
+                }
+                
+                displayLinkedInAnalysis(result);
+            } catch (error) {
+                console.error('LinkedIn analysis error:', error);
+                showError('linkedinResult', 'Failed to analyze profile. Please check your input and try again.');
+            }
+        }
+
+        async function startMockInterview(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                role: formData.get('role'),
+                difficulty: formData.get('difficulty'),
+                question_number: 1
+            };
+            
+            showLoading('interviewResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/mock-interview`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displayMockInterview(result, data);
+            } catch (error) {
+                showError('interviewResult', error.message);
+            }
+        }
+
+        async function predictCareer(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                current_role: formData.get('current_role'),
+                experience_years: formData.get('experience_years'),
+                skills: formData.get('skills').split(',').map(s => s.trim()),
+                industry: formData.get('industry'),
+                career_goals: formData.get('career_goals')
+            };
+            
+            showLoading('careerResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/career-trajectory`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displayCareerTrajectory(result);
+            } catch (error) {
+                showError('careerResult', error.message);
+            }
+        }
+
+        async function analyzeSkillGap(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                current_skills: formData.get('current_skills').split(',').map(s => s.trim()),
+                target_role: formData.get('target_role')
+            };
+            
+            showLoading('skillGapResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/skill-gaps`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displaySkillGapAnalysis(result);
+            } catch (error) {
+                showError('skillGapResult', error.message);
+            }
+        }
+
+        async function getSalaryStrategy(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                user_data: {
+                    current_salary: formData.get('current_salary'),
+                    experience_years: formData.get('experience_years'),
+                    skills: formData.get('skills').split(',').map(s => s.trim())
+                },
+                job_offer: {
+                    offered_salary: formData.get('offered_salary'),
+                    role: formData.get('role'),
+                    company: formData.get('company')
+                }
+            };
+            
+            showLoading('salaryResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/salary-negotiation`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displaySalaryStrategy(result);
+            } catch (error) {
+                showError('salaryResult', error.message);
+            }
+        }
+
+        async function analyzeJob(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                job_description: formData.get('job_description')
+            };
+            
+            showLoading('jobAnalysisResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/job-analysis`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displayJobAnalysis(result);
+            } catch (error) {
+                showError('jobAnalysisResult', error.message);
+            }
+        }
+
+        async function createLearningPath(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            const data = {
+                user_profile: {
+                    skills: formData.get('skills').split(',').map(s => s.trim()),
+                    hours_per_week: formData.get('hours_per_week'),
+                    budget: formData.get('budget')
+                },
+                goal: formData.get('goal')
+            };
+            
+            showLoading('learningPathResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/learning-path`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                displayLearningPath(result);
+            } catch (error) {
+                showError('learningPathResult', error.message);
+            }
+        }
+
+        // Display Functions
+        function showLoading(elementId) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.innerHTML = `
+                <div class="text-center py-5">
+                    <div class="loading-spinner mx-auto mb-3"></div>
+                    <p class="text-muted">AI is working its magic...</p>
+                </div>
+            `;
+        }
+
+        function showError(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <strong>Error:</strong> ${message}
+                </div>
+            `;
+        }
+
+        function displayATSResult(result) {
+            const element = document.getElementById('atsResult');
+            if (result.success) {
+                const resume = result.resume;
+                
+                // Format experience
+                let experienceHTML = '';
+                if (Array.isArray(resume.experience)) {
+                    experienceHTML = resume.experience.map(exp => {
+                        if (typeof exp === 'object') {
+                            return `<div class="mb-3">
+                                <strong>${exp.title || exp.role || ''}</strong> ${exp.company ? `at ${exp.company}` : ''}
+                                <br><small class="text-muted">${exp.dates || exp.duration || ''}</small>
+                                <ul class="mt-2">
+                                    ${Array.isArray(exp.details) ? exp.details.map(d => `<li>${d}</li>`).join('') : ''}
+                                </ul>
+                            </div>`;
+                        }
+                        return `<p>${exp}</p>`;
+                    }).join('');
+                } else {
+                    experienceHTML = `<p>${resume.experience}</p>`;
+                }
+                
+                // Format education
+                let educationHTML = '';
+                if (typeof resume.education === 'object' && !Array.isArray(resume.education)) {
+                    educationHTML = `
+                        <p><strong>${resume.education.degree || ''}</strong></p>
+                        <p>${resume.education.university || ''} ${resume.education.graduation_year ? `(${resume.education.graduation_year})` : ''}</p>
+                        ${resume.education.relevant_coursework ? `<p><small>Relevant Coursework: ${Array.isArray(resume.education.relevant_coursework) ? resume.education.relevant_coursework.join(', ') : resume.education.relevant_coursework}</small></p>` : ''}
+                    `;
+                } else {
+                    educationHTML = `<p>${resume.education}</p>`;
+                }
+                
+                // Format skills
+                let skillsHTML = '';
+                if (typeof resume.skills === 'object' && !Array.isArray(resume.skills)) {
+                    skillsHTML = Object.entries(resume.skills).map(([category, skills]) => `
+                        <div class="mb-2">
+                            <strong>${category}:</strong>
+                            <div class="mt-1">
+                                ${Array.isArray(skills) ? skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('') : skills}
+                            </div>
+                        </div>
+                    `).join('');
+                } else if (Array.isArray(resume.skills)) {
+                    skillsHTML = resume.skills.map(skill => `<span class="skill-badge">${skill}</span>`).join('');
+                } else {
+                    skillsHTML = resume.skills;
+                }
+                
+                // Store for PDF download
+                window.currentResume = resume;
+                
+                element.innerHTML = `
+                    <div class="result-card">
+                        <div class="text-center mb-4">
+                            <div class="ats-score">${result.ats_score || 85}%</div>
+                            <p class="text-muted">ATS Compatibility Score</p>
+                        </div>
+                        <h5><i class="fas fa-user me-2"></i>Professional Summary</h5>
+                        <p>${resume.summary}</p>
+                        
+                        <h5 class="mt-4"><i class="fas fa-briefcase me-2"></i>Experience</h5>
+                        ${experienceHTML}
+                        
+                        <h5 class="mt-4"><i class="fas fa-graduation-cap me-2"></i>Education</h5>
+                        ${educationHTML}
+                        
+                        <h5 class="mt-4"><i class="fas fa-code me-2"></i>Skills</h5>
+                        <div class="mb-3">
+                            ${skillsHTML}
+                        </div>
+                        
+                        ${resume.projects && Array.isArray(resume.projects) ? `
+                            <h5 class="mt-4"><i class="fas fa-project-diagram me-2"></i>Projects</h5>
+                            ${resume.projects.map(proj => `
+                                <div class="mb-3">
+                                    <strong>${proj.name}</strong>
+                                    <p>${proj.description}</p>
+                                    <small>Technologies: ${Array.isArray(proj.technologies) ? proj.technologies.join(', ') : proj.technologies}</small>
+                                    ${proj.impact ? `<br><small><i>${proj.impact}</i></small>` : ''}
+                                </div>
+                            `).join('')}
+                        ` : ''}
+                        
+                        ${result.optimization_tips && result.optimization_tips.length > 0 ? `
+                            <h5 class="mt-4"><i class="fas fa-lightbulb me-2"></i>Optimization Tips</h5>
+                            <ul>
+                                ${result.optimization_tips.map(tip => `<li>${tip}</li>`).join('')}
+                            </ul>
+                        ` : ''}
+                        
+                        <button class="btn btn-gradient w-100 mt-3" onclick="downloadResumeAsPDF()">
+                            <i class="fas fa-download me-2"></i>Download as PDF
+                        </button>
+                    </div>
+                `;
+            } else {
+                showError('atsResult', result.error);
+            }
+        }
+
+        function displayCoverLetter(result) {
+            const element = document.getElementById('coverLetterResult');
+            if (result.success) {
+                element.innerHTML = `
+                    <div class="result-card">
+                        <h5 class="mb-3"><i class="fas fa-file-alt me-2"></i>Your Personalized Cover Letter</h5>
+                        <div style="white-space: pre-wrap; line-height: 1.8;">${result.cover_letter}</div>
+                        <button class="btn btn-gradient w-100 mt-4" onclick="copyToClipboard(${JSON.stringify(result.cover_letter).replace(/"/g, '&quot;')})">
+                            <i class="fas fa-copy me-2"></i>Copy to Clipboard
+                        </button>
+                    </div>
+                `;
+            } else {
+                showError('coverLetterResult', result.error);
+            }
+        }
+
+        function displayLinkedInAnalysis(result) {
+            const element = document.getElementById('linkedinResult');
+            
+            console.log('LinkedIn result:', result);
+            
+            if (!result.success) {
+                showError('linkedinResult', result.error || 'Analysis failed');
+                return;
+            }
+            
+            const analysis = result.analysis;
+            
+            if (!analysis || typeof analysis !== 'object') {
+                showError('linkedinResult', 'Invalid analysis data received');
+                return;
+            }
+            
+            // Format tips
+            const formatTips = (tips) => {
+                if (Array.isArray(tips)) {
+                    return '<ul>' + tips.map(tip => `<li>${tip}</li>`).join('') + '</ul>';
+                } else if (typeof tips === 'string') {
+                    return `<p>${tips}</p>`;
+                }
+                return '<p>No tips available</p>';
+            };
+            
+            element.innerHTML = `
+                <div class="result-card">
+                    <div class="text-center mb-4">
+                        <div class="score-circle">${analysis.score || 75}</div>
+                        <p class="text-muted">Profile Strength Score</p>
+                    </div>
+                    
+                    ${analysis.headline_tips ? `
+                        <h5><i class="fas fa-heading me-2"></i>Headline Optimization</h5>
+                        ${formatTips(analysis.headline_tips)}
+                    ` : ''}
+                    
+                    ${analysis.about_tips ? `
+                        <h5 class="mt-4"><i class="fas fa-info-circle me-2"></i>About Section Tips</h5>
+                        ${formatTips(analysis.about_tips)}
+                    ` : ''}
+                    
+                    ${analysis.experience_tips ? `
+                        <h5 class="mt-4"><i class="fas fa-briefcase me-2"></i>Experience Tips</h5>
+                        ${formatTips(analysis.experience_tips)}
+                    ` : ''}
+                    
+                    ${analysis.skills_strategy ? `
+                        <h5 class="mt-4"><i class="fas fa-star me-2"></i>Skills Strategy</h5>
+                        ${formatTips(analysis.skills_strategy)}
+                    ` : ''}
+                    
+                    ${analysis.content_ideas ? `
+                        <h5 class="mt-4"><i class="fas fa-lightbulb me-2"></i>Content Ideas</h5>
+                        ${formatTips(analysis.content_ideas)}
+                    ` : ''}
+                    
+                    ${analysis.networking_tips ? `
+                        <h5 class="mt-4"><i class="fas fa-users me-2"></i>Networking Tips</h5>
+                        ${formatTips(analysis.networking_tips)}
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function displayMockInterview(result, config) {
+            const element = document.getElementById('interviewResult');
+            
+            console.log('Mock interview result:', result);
+            
+            if (!result.success || !result.interview) {
+                showError('interviewResult', result.error || 'Failed to generate interview');
+                return;
+            }
+            
+            const interview = result.interview;
+            
+            // Store question for later evaluation
+            window.currentInterviewQuestion = interview.question || '';
+            window.currentInterviewRole = config.role;
+            
+            // Format evaluation criteria
+            let evaluationHTML = '';
+            if (interview.evaluation_criteria) {
+                if (typeof interview.evaluation_criteria === 'string') {
+                    evaluationHTML = `<p>${interview.evaluation_criteria}</p>`;
+                } else if (Array.isArray(interview.evaluation_criteria)) {
+                    evaluationHTML = '<ul>' + interview.evaluation_criteria.map(c => `<li>${c}</li>`).join('') + '</ul>';
+                } else {
+                    evaluationHTML = `<p>${JSON.stringify(interview.evaluation_criteria)}</p>`;
+                }
+            }
+            
+            // Format key points
+            let keyPointsHTML = '';
+            if (interview.key_points) {
+                if (Array.isArray(interview.key_points)) {
+                    keyPointsHTML = '<ul>' + interview.key_points.map(p => `<li>${p}</li>`).join('') + '</ul>';
+                } else if (typeof interview.key_points === 'string') {
+                    keyPointsHTML = `<p>${interview.key_points}</p>`;
+                } else {
+                    keyPointsHTML = `<p>${JSON.stringify(interview.key_points)}</p>`;
+                }
+            }
+            
+            element.innerHTML = `
+                <div class="result-card">
+                    <h5 class="mb-3"><i class="fas fa-question-circle me-2"></i>Interview Question</h5>
+                    <div class="alert alert-info">
+                        <strong>${interview.question || 'Question not available'}</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Your Answer</label>
+                        <textarea id="interviewAnswer" class="form-control" rows="5" placeholder="Type your answer here..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-gradient w-100" onclick="submitInterviewAnswerFromInput()">
+                        <i class="fas fa-paper-plane me-2"></i>Submit Answer for Evaluation
+                    </button>
+                    
+                    <div class="mt-4">
+                        <h6><i class="fas fa-lightbulb me-2"></i>What We're Looking For:</h6>
+                        ${evaluationHTML || '<p>N/A</p>'}
+                        
+                        <h6 class="mt-3"><i class="fas fa-check-circle me-2"></i>Key Points to Cover:</h6>
+                        ${keyPointsHTML || '<p>N/A</p>'}
+                    </div>
+                </div>
+                <div id="evaluationResult"></div>
+            `;
+        }
+        
+        function submitInterviewAnswerFromInput() {
+            submitInterviewAnswer(window.currentInterviewQuestion, window.currentInterviewRole);
+        }
+
+        async function submitInterviewAnswer(question, role) {
+            const answer = document.getElementById('interviewAnswer').value;
+            if (!answer.trim()) {
+                alert('Please provide an answer');
+                return;
+            }
+            
+            showLoading('evaluationResult');
+            
+            try {
+                const response = await fetch(`${API_URL}/evaluate-answer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question, answer, role })
+                });
+                
+                const result = await response.json();
+                displayEvaluation(result);
+            } catch (error) {
+                showError('evaluationResult', error.message);
+            }
+        }
+
+        function displayEvaluation(result) {
+            const element = document.getElementById('evaluationResult');
+            if (result.success && result.evaluation) {
+                const eval = result.evaluation;
+                element.innerHTML = `
+                    <div class="result-card mt-3">
+                        <h5 class="mb-3"><i class="fas fa-chart-line me-2"></i>Evaluation Results</h5>
+                        
+                        <div class="text-center mb-4">
+                            <div class="score-circle">${eval.score}/10</div>
+                            <p class="text-muted">Your Score</p>
+                        </div>
+                        
+                        <h6><i class="fas fa-thumbs-up me-2 text-success"></i>Strengths</h6>
+                        <p>${JSON.stringify(eval.strengths)}</p>
+                        
+                        <h6 class="mt-3"><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Areas for Improvement</h6>
+                        <p>${JSON.stringify(eval.improvements)}</p>
+                        
+                        <h6 class="mt-3"><i class="fas fa-lightbulb me-2 text-info"></i>Suggestions</h6>
+                        <p>${JSON.stringify(eval.suggestions)}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayCareerTrajectory(result) {
+            const element = document.getElementById('careerResult');
+            if (result.success && result.trajectory) {
+                const traj = result.trajectory;
+                
+                function formatPath(path, title, icon, colorClass) {
+                    if (!path) return `<p class="text-muted">No data available</p>`;
+                    
+                    let html = `<div class="mb-4">
+                        <h6 class="${colorClass}"><i class="fas ${icon} me-2"></i>${title}</h6>`;
+                    
+                    if (path.yearly_progression) {
+                        html += `<div class="ms-3"><strong>Career Progression:</strong><ul class="mt-2">`;
+                        if (Array.isArray(path.yearly_progression)) {
+                            path.yearly_progression.forEach(year => html += `<li>${typeof year === 'object' ? JSON.stringify(year) : year}</li>`);
+                        } else if (typeof path.yearly_progression === 'object') {
+                            Object.entries(path.yearly_progression).forEach(([key, value]) => 
+                                html += `<li><strong>${key}:</strong> ${value}</li>`);
+                        } else {
+                            html += `<li>${path.yearly_progression}</li>`;
+                        }
+                        html += `</ul></div>`;
+                    }
+                    
+                    if (path.success_probability) {
+                        html += `<p class="ms-3"><strong>Success Probability:</strong> ${path.success_probability}</p>`;
+                    }
+                    
+                    if (path.salary_progression) {
+                        html += `<p class="ms-3"><strong>Salary Growth:</strong> ${typeof path.salary_progression === 'object' ? JSON.stringify(path.salary_progression) : path.salary_progression}</p>`;
+                    }
+                    
+                    html += `</div>`;
+                    return html;
+                }
+                
+                element.innerHTML = `
+                    <div class="result-card">
+                        <h5 class="mb-4"><i class="fas fa-road me-2"></i>Your 5-Year Career Paths</h5>
+                        <p class="text-muted mb-4">AI has analyzed your profile and predicted three possible career trajectories:</p>
+                        
+                        ${formatPath(traj.conservative, 'Conservative Path (Steady Growth)', 'fa-chart-line', 'text-success')}
+                        ${formatPath(traj.ambitious, 'Ambitious Path (Fast-Track)', 'fa-rocket', 'text-primary')}
+                        ${formatPath(traj.pivot, 'Pivot Path (Career Change)', 'fa-exchange-alt', 'text-info')}
+                    </div>
+                `;
+            } else {
+                showError('careerResult', result.error || 'Failed to generate career prediction');
+            }
+        }
+
+        function displaySkillGapAnalysis(result) {
+            const element = document.getElementById('skillGapResult');
+            if (result.success && result.analysis) {
+                const analysis = result.analysis;
+                
+                function formatList(items, fallback = 'No data available') {
+                    if (!items) return `<p class="text-muted">${fallback}</p>`;
+                    if (Array.isArray(items)) {
+                        return '<ul class="ms-3">' + items.map(item => `<li>${item}</li>`).join('') + '</ul>';
+                    }
+                    if (typeof items === 'object') {
+                        let html = '<ul class="ms-3">';
+                        Object.entries(items).forEach(([key, value]) => {
+                            html += `<li><strong>${key}:</strong> ${Array.isArray(value) ? value.join(', ') : value}</li>`;
+                        });
+                        html += '</ul>';
+                        return html;
+                    }
+                    return `<p class="ms-3">${items}</p>`;
+                }
+                
+                element.innerHTML = `
+                    <div class="result-card">
+                        <h5 class="mb-4"><i class="fas fa-tasks me-2"></i>Skill Gap Analysis</h5>
+                        
+                        <h6><i class="fas fa-star me-2 text-warning"></i>Required Skills</h6>
+                        ${formatList(analysis.required_skills)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-exclamation-circle me-2 text-danger"></i>Skill Gaps</h6>
+                        ${formatList(analysis.skill_gaps)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-calendar me-2 text-info"></i>Learning Timeline</h6>
+                        ${formatList(analysis.learning_timeline)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-book me-2 text-success"></i>Recommended Resources</h6>
+                        ${formatList(analysis.resources)}
+                    </div>
+                `;
+            } else {
+                showError('skillGapResult', result.error || 'Failed to analyze skill gaps');
+            }
+        }
+
+        function displaySalaryStrategy(result) {
+            const element = document.getElementById('salaryResult');
+            if (result.success && result.strategy) {
+                const strategy = result.strategy;
+                
+                function formatMarketRange(range) {
+                    if (!range) return '<p>No data</p>';
+                    if (typeof range === 'object') {
+                        let html = '<ul class="list-unstyled mb-0">';
+                        Object.entries(range).forEach(([key, value]) => {
+                            html += `<li><strong>${key}:</strong> ${value}</li>`;
+                        });
+                        html += '</ul>';
+                        return html;
+                    }
+                    return `<p>${range}</p>`;
+                }
+                
+                function formatList(items) {
+                    if (!items) return '<p>No data</p>';
+                    if (Array.isArray(items)) {
+                        return '<ul class="ms-3">' + items.map(item => `<li>${item}</li>`).join('') + '</ul>';
+                    }
+                    return `<p>${items}</p>`;
+                }
+                
+                element.innerHTML = `
+                    <div class="result-card">
+                        <h5 class="mb-4"><i class="fas fa-hand-holding-usd me-2"></i>Salary Negotiation Strategy</h5>
+                        
+                        <div class="alert alert-info">
+                            <h6><i class="fas fa-chart-bar me-2"></i>Market Range</h6>
+                            ${formatMarketRange(strategy.market_range)}
+                        </div>
+                        
+                        <div class="alert alert-success">
+                            <h6><i class="fas fa-bullseye me-2"></i>Recommended Counter-Offer</h6>
+                            <p class="h4 mb-0">${strategy.counter_offer || 'Not specified'}</p>
+                        </div>
+                        
+                        ${strategy.your_position ? `
+                        <div class="alert alert-warning">
+                            <h6><i class="fas fa-user-check me-2"></i>Your Position</h6>
+                            <p class="mb-0">${strategy.your_position}</p>
+                        </div>
+                        ` : ''}
+                        
+                        <h6 class="mt-4"><i class="fas fa-comments me-2"></i>Negotiation Script</h6>
+                        <div style="white-space: pre-wrap; background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid #6c63ff;">
+                            ${strategy.negotiation_script || 'No script provided'}
+                        </div>
+                        
+                        <h6 class="mt-4"><i class="fas fa-gift me-2"></i>Alternative Benefits to Negotiate</h6>
+                        ${formatList(strategy.alternative_benefits)}
+                        
+                        ${strategy.walk_away_threshold ? `
+                        <div class="alert alert-danger mt-3">
+                            <h6><i class="fas fa-exclamation-triangle me-2"></i>Walk Away Threshold</h6>
+                            <p class="mb-0">${strategy.walk_away_threshold}</p>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                showError('salaryResult', result.error || 'Failed to generate negotiation strategy');
+            }
+        }
+
+        function displayJobAnalysis(result) {
+            const element = document.getElementById('jobAnalysisResult');
+            if (result.success && result.analysis) {
+                const analysis = result.analysis;
+                
+                function formatList(items, fallback = 'No data available') {
+                    if (!items) return `<p class="text-muted">${fallback}</p>`;
+                    if (Array.isArray(items)) {
+                        return '<ul class="ms-3">' + items.map(item => `<li>${item}</li>`).join('') + '</ul>';
+                    }
+                    if (typeof items === 'object') {
+                        let html = '<ul class="ms-3">';
+                        Object.entries(items).forEach(([key, value]) => {
+                            if (Array.isArray(value)) {
+                                html += `<li><strong>${key}:</strong> ${value.join(', ')}</li>`;
+                            } else {
+                                html += `<li><strong>${key}:</strong> ${value}</li>`;
+                            }
+                        });
+                        html += '</ul>';
+                        return html;
+                    }
+                    return `<p class="ms-3">${items}</p>`;
+                }
+                
+                element.innerHTML = `
+                    <div class="result-card">
+                        <h5 class="mb-4"><i class="fas fa-search-plus me-2"></i>Job Description Analysis</h5>
+                        
+                        <h6><i class="fas fa-check-circle me-2 text-success"></i>Required Skills</h6>
+                        ${formatList(analysis.required_skills)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-eye me-2 text-info"></i>Hidden Requirements</h6>
+                        ${formatList(analysis.hidden_requirements)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-building me-2 text-primary"></i>Company Culture Indicators</h6>
+                        ${formatList(analysis.culture_indicators)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-flag me-2 text-danger"></i>Red Flags</h6>
+                        ${formatList(analysis.red_flags)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-rupee-sign me-2 text-success"></i>Estimated Salary Range</h6>
+                        ${formatList(analysis.salary_range)}
+                        
+                        <h6 class="mt-4"><i class="fas fa-lightbulb me-2 text-warning"></i>Application Tips</h6>
+                        ${formatList(analysis.application_tips)}
+                    </div>
+                `;
+            } else {
+                showError('jobAnalysisResult', result.error || 'Failed to analyze job description');
+            }
+        }
+
+        function displayLearningPath(result) {
+            const element = document.getElementById('learningPathResult');
+            if (result.success && result.learning_path) {
+                const path = result.learning_path;
+                
+                function formatPhases(phases) {
+                    if (!phases) return '';
+                    let html = '<div class="mb-4">';
+                    Object.entries(phases).forEach(([phase, details]) => {
+                        html += `<div class="mb-3"><h6 class="text-primary">${phase}</h6>`;
+                        if (details.topics && Array.isArray(details.topics)) {
+                            html += '<ul class="ms-3">' + details.topics.map(t => `<li>${t}</li>`).join('') + '</ul>';
+                        }
+                        if (details.duration) html += `<p class="text-muted">Duration: ${details.duration}</p>`;
+                        html += '</div>';
+                    });
+                    html += '</div>';
+                    return html;
+                }
+                
+                function formatList(items) {
+                    if (!items) return '';
+                    if (Array.isArray(items)) {
+                        return '<ul class="ms-3">' + items.map(item => {
+                            if (typeof item === 'object') {
+                                let li = `<li><strong>${item.name || 'Resource'}:</strong> `;
+                                li += item.type ? `${item.type} - ` : '';
+                                li += item.cost ? `Cost: ${item.cost}` : '';
+                                li += item.duration ? ` (${item.duration})` : '';
+                                li += '</li>';
+                                return li;
+                            }
+                            return `<li>${item}</li>`;
+                        }).join('') + '</ul>';
+                    }
+                    if (typeof items === 'object') {
+                        return '<ul class="ms-3">' + Object.entries(items).map(([k,v]) => 
+                            `<li><strong>${k}:</strong> ${v}</li>`).join('') + '</ul>';
+                    }
+                    return `<p>${items}</p>`;
+                }
+                
+                element.innerHTML = `
+                    <div class="result-card">
+                        <h5 class="mb-4"><i class="fas fa-graduation-cap me-2"></i>Your Personalized Learning Path</h5>
+                        
+                        ${path.estimated_time ? `<div class="alert alert-info"><strong>Total Duration:</strong> ${path.estimated_time}</div>` : ''}
+                        ${path.total_budget ? `<div class="alert alert-success"><strong>Budget:</strong> ${path.total_budget}</div>` : ''}
+                        
+                        ${path.phases ? `<h6 class="mt-4"><i class="fas fa-layer-group me-2"></i>Learning Phases</h6>${formatPhases(path.phases)}` : ''}
+                        
+                        ${path.weekly_curriculum ? `<h6 class="mt-4"><i class="fas fa-calendar-week me-2"></i>Weekly Curriculum</h6>${formatList(path.weekly_curriculum)}` : ''}
+                        
+                        ${path.recommended_resources ? `<h6 class="mt-4"><i class="fas fa-book me-2"></i>Recommended Resources</h6>${formatList(path.recommended_resources)}` : ''}
+                        
+                        ${path.practice_projects ? `<h6 class="mt-4"><i class="fas fa-project-diagram me-2"></i>Practice Projects</h6>${formatList(path.practice_projects)}` : ''}
+                        
+                        ${path.milestones ? `<h6 class="mt-4"><i class="fas fa-flag-checkered me-2"></i>Milestones</h6>${formatList(path.milestones)}` : ''}
+                        
+                        ${path.tips ? `<h6 class="mt-4"><i class="fas fa-lightbulb me-2"></i>Success Tips</h6>${formatList(path.tips)}` : ''}
+                    </div>
+                `;
+            } else {
+                showError('learningPathResult', result.error || 'Failed to generate learning path');
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Copied to clipboard!');
+            });
+        }
+
+        function downloadResume() {
+            alert('PDF download feature will be implemented with backend integration');
+        }
+
+        function downloadResumeAsPDF() {
+            if (!window.currentResume) {
+                alert('No resume data available. Please generate a resume first.');
+                return;
+            }
+            
+            const resume = window.currentResume;
+            
+            // Create formatted text content
+            let content = '='.repeat(60) + '\n';
+            content += 'PROFESSIONAL RESUME\n';
+            content += '='.repeat(60) + '\n\n';
+            
+            content += 'PROFESSIONAL SUMMARY\n';
+            content += '-'.repeat(60) + '\n';
+            content += resume.summary + '\n\n';
+            
+            // Experience
+            content += 'EXPERIENCE\n';
+            content += '-'.repeat(60) + '\n';
+            if (Array.isArray(resume.experience)) {
+                resume.experience.forEach(exp => {
+                    if (typeof exp === 'object') {
+                        content += `${exp.title || exp.role || ''} at ${exp.company || ''}\n`;
+                        content += `${exp.dates || exp.duration || ''}\n`;
+                        if (Array.isArray(exp.details)) {
+                            exp.details.forEach(detail => {
+                                content += `  • ${detail}\n`;
+                            });
+                        }
+                        content += '\n';
+                    } else {
+                        content += exp + '\n\n';
+                    }
+                });
+            } else {
+                content += resume.experience + '\n\n';
+            }
+            
+            // Education
+            content += 'EDUCATION\n';
+            content += '-'.repeat(60) + '\n';
+            if (typeof resume.education === 'object' && !Array.isArray(resume.education)) {
+                content += `${resume.education.degree || ''}\n`;
+                content += `${resume.education.university || ''} (${resume.education.graduation_year || ''})\n`;
+                if (resume.education.relevant_coursework) {
+                    content += `Coursework: ${Array.isArray(resume.education.relevant_coursework) ? resume.education.relevant_coursework.join(', ') : resume.education.relevant_coursework}\n`;
+                }
+            } else {
+                content += resume.education;
+            }
+            content += '\n\n';
+            
+            // Skills
+            content += 'SKILLS\n';
+            content += '-'.repeat(60) + '\n';
+            if (typeof resume.skills === 'object' && !Array.isArray(resume.skills)) {
+                Object.entries(resume.skills).forEach(([category, skills]) => {
+                    content += `${category}:\n`;
+                    const skillList = Array.isArray(skills) ? skills.join(', ') : skills;
+                    content += `  ${skillList}\n\n`;
+                });
+            } else if (Array.isArray(resume.skills)) {
+                content += resume.skills.join(', ') + '\n\n';
+            } else {
+                content += resume.skills + '\n\n';
+            }
+            
+            // Projects if available
+            if (resume.projects && Array.isArray(resume.projects)) {
+                content += 'PROJECTS\n';
+                content += '-'.repeat(60) + '\n';
+                resume.projects.forEach(proj => {
+                    content += `${proj.name}\n`;
+                    content += `${proj.description}\n`;
+                    content += `Technologies: ${Array.isArray(proj.technologies) ? proj.technologies.join(', ') : proj.technologies}\n`;
+                    if (proj.impact) {
+                        content += `Impact: ${proj.impact}\n`;
+                    }
+                    content += '\n';
+                });
+            }
+            
+            // Certifications if available
+            if (resume.certifications && Array.isArray(resume.certifications)) {
+                content += 'CERTIFICATIONS\n';
+                content += '-'.repeat(60) + '\n';
+                resume.certifications.forEach(cert => {
+                    if (typeof cert === 'object') {
+                        content += `${cert.name} - ${cert.issuer} (${cert.year})\n`;
+                    } else {
+                        content += cert + '\n';
+                    }
+                });
+                content += '\n';
+            }
+            
+            content += '='.repeat(60) + '\n';
+            content += 'Generated by CareerNexus : AI Based Personalised Career Advisor\n';
+            
+            // Create and download
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ATS_Optimized_Resume.txt';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            
+            // Show success message
+            showSuccess('Resume downloaded successfully! You can copy this into a document editor and save as PDF.');
+        }
+        
+        function showSuccess(message) {
+            const toast = document.createElement('div');
+            toast.className = 'alert alert-success position-fixed top-0 start-50 translate-middle-x mt-3';
+            toast.style.zIndex = '9999';
+            toast.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+
+    <!-- Footer Section -->
+    <footer style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 60px 0 20px 0; margin-top: 80px;">
+        <div class="container">
+            <div class="row">
+                <!-- About Section -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h4 class="fw-bold mb-4" style="color: white;">
+                        <i class="fas fa-rocket me-2"></i>CareerNexus
+                    </h4>
+                    <p style="color: rgba(255,255,255,0.9); line-height: 1.8;">
+                        Your AI-powered career companion. Empowering professionals with cutting-edge AI technology to achieve their career goals.
+                    </p>
+                    <div class="mt-3">
+                        <span class="badge bg-light text-primary me-2 mb-2 px-3 py-2">
+                            <i class="fas fa-sparkles me-1"></i>AI-Powered
+                        </span>
+                        <span class="badge bg-light text-primary mb-2 px-3 py-2">
+                            <i class="fas fa-chart-line me-1"></i>10+ Features
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="fw-bold mb-4" style="color: white;">
+                        <i class="fas fa-link me-2"></i>Quick Links
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <a href="#features" style="color: rgba(255,255,255,0.9); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.paddingLeft='10px'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.paddingLeft='0'">
+                                <i class="fas fa-chevron-right me-2"></i>Features
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="#" onclick="scrollToFeatures(); return false;" style="color: rgba(255,255,255,0.9); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.paddingLeft='10px'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.paddingLeft='0'">
+                                <i class="fas fa-chevron-right me-2"></i>Get Started
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="#" style="color: rgba(255,255,255,0.9); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.paddingLeft='10px'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.paddingLeft='0'">
+                                <i class="fas fa-chevron-right me-2"></i>About
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <a href="#" style="color: rgba(255,255,255,0.9); text-decoration: none; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.paddingLeft='10px'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.paddingLeft='0'">
+                                <i class="fas fa-chevron-right me-2"></i>Privacy Policy
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <h5 class="fw-bold mb-4" style="color: white;">
+                        <i class="fas fa-address-card me-2"></i>Get In Touch
+                    </h5>
+                    <div class="mb-3">
+                        <a href="mailto:rohit.salke.aids.2023@vpkbiet.org" style="color: rgba(255,255,255,0.9); text-decoration: none; display: flex; align-items: center; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <small style="display: block; opacity: 0.8;">Email</small>
+                                <span style="font-size: 14px;">rohit.salke.aids.2023@vpkbiet.org</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="tel:+917620156611" style="color: rgba(255,255,255,0.9); text-decoration: none; display: flex; align-items: center; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fas fa-phone-alt"></i>
+                            </div>
+                            <div>
+                                <small style="display: block; opacity: 0.8;">Phone</small>
+                                <span style="font-size: 14px;">+91 76201 56611</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="mb-3">
+                        <a href="https://www.linkedin.com/in/rohit-salke-10b8a9289/" target="_blank" style="color: rgba(255,255,255,0.9); text-decoration: none; display: flex; align-items: center; transition: all 0.3s;" onmouseover="this.style.color='white'; this.style.transform='translateX(5px)'" onmouseout="this.style.color='rgba(255,255,255,0.9)'; this.style.transform='translateX(0)'">
+                            <div style="background: rgba(255,255,255,0.2); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin-right: 15px;">
+                                <i class="fab fa-linkedin-in"></i>
+                            </div>
+                            <div>
+                                <small style="display: block; opacity: 0.8;">LinkedIn</small>
+                                <span style="font-size: 14px;">Rohit Salke</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr style="border-color: rgba(255,255,255,0.2); margin: 40px 0 20px 0;">
+
+            <!-- Bottom Footer -->
+            <div class="row">
+                <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                    <p style="color: rgba(255,255,255,0.8); margin: 0;">
+                        © 2025 CareerNexus. All rights reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <p style="color: rgba(255,255,255,0.8); margin: 0;">
+                        <i class="fas fa-heart" style="color: #ff6b6b;"></i> Made with AI & Passion
+                        <span class="ms-2">|</span>
+                        <span class="ms-2"><i class="fas fa-bolt" style="color: #ffd93d;"></i> Powered by Google Gemini</span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Social Media Icons -->
+            <div class="text-center mt-4">
+                <a href="https://www.linkedin.com/in/rohit-salke-10b8a9289/" target="_blank" class="btn btn-light btn-sm rounded-circle me-2" style="width: 45px; height: 45px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px) rotate(360deg)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0) rotate(0deg)'; this.style.boxShadow='none'">
+                    <i class="fab fa-linkedin-in" style="color: #667eea;"></i>
+                </a>
+                <a href="mailto:rohit.salke.aids.2023@vpkbiet.org" class="btn btn-light btn-sm rounded-circle me-2" style="width: 45px; height: 45px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px) rotate(360deg)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0) rotate(0deg)'; this.style.boxShadow='none'">
+                    <i class="fas fa-envelope" style="color: #667eea;"></i>
+                </a>
+                <a href="tel:+917620156611" class="btn btn-light btn-sm rounded-circle" style="width: 45px; height: 45px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.3s;" onmouseover="this.style.transform='translateY(-5px) rotate(360deg)'; this.style.boxShadow='0 10px 20px rgba(0,0,0,0.2)'" onmouseout="this.style.transform='translateY(0) rotate(0deg)'; this.style.boxShadow='none'">
+                    <i class="fas fa-phone-alt" style="color: #667eea;"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

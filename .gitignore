@@ -1,0 +1,57 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+env/
+
+# Environment variables
+.env
+.env.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+server.out.log
+server.err.log
+
+# Uploads and downloads
+uploads/*
+downloads/*
+!uploads/.gitkeep
+!downloads/.gitkeep
+
+# Build files
+dist/
+build/
+*.egg-info/
+
+# Vercel
+.vercel
+
+# Node modules (if any)
+node_modules/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.Python

@@ -1,0 +1,2824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Advisor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .skill-tag {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin: 3px;
+            display: inline-block;
+            font-size: 0.9em;
+        }
+        .progress-ring {
+            width: 120px;
+            height: 120px;
+        }
+        .progress-ring circle {
+            fill: transparent;
+            stroke-width: 8;
+        }
+        .progress-ring .progress-circle {
+            stroke: #4caf50;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        .progress-ring .background-circle {
+            stroke: #e0e0e0;
+        }
+        .loading {
+            display: none;
+        }
+        .result-section {
+            display: none;
+        }
+        .career-card {
+            border-left: 4px solid #4caf50;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background: #4caf50;
+            border-radius: 50%;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 12px;
+            width: 2px;
+            height: calc(100% + 8px);
+            background: #e0e0e0;
+        }
+        .timeline-item:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">AI-Powered Career Advisor</h1>
+                    <p class="lead mb-4">Discover your ideal career path with personalized recommendations based on your skills, interests, and the evolving job market.</p>
+                    <div class="d-flex gap-3">
+                        <span class="badge bg-light text-dark fs-6"><i class="fas fa-brain me-2"></i>AI Analysis</span>
+                        <span class="badge bg-light text-dark fs-6"><i class="fas fa-chart-line me-2"></i>Market Insights</span>
+                        <span class="badge bg-light text-dark fs-6"><i class="fas fa-graduation-cap me-2"></i>Learning Plans</span>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <i class="fas fa-user-graduate" style="font-size: 200px; opacity: 0.3;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container my-5">
+        <!-- Input Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0"><i class="fas fa-clipboard-list me-2"></i>Tell Us About Yourself</h4>
+                    </div>
+                    <div class="card-body">
+                        <form id="careerForm">
+                            <!-- Skills Section -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Your Skills</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Python Programming" id="skill1">
+                                            <label class="form-check-label" for="skill1">Python Programming</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Machine Learning" id="skill2">
+                                            <label class="form-check-label" for="skill2">Machine Learning</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Data Analysis" id="skill3">
+                                            <label class="form-check-label" for="skill3">Data Analysis</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="JavaScript" id="skill4">
+                                            <label class="form-check-label" for="skill4">JavaScript</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="SQL" id="skill5">
+                                            <label class="form-check-label" for="skill5">SQL</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Project Management" id="skill6">
+                                            <label class="form-check-label" for="skill6">Project Management</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Communication" id="skill7">
+                                            <label class="form-check-label" for="skill7">Communication</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Leadership" id="skill8">
+                                            <label class="form-check-label" for="skill8">Leadership</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Problem Solving" id="skill9">
+                                            <label class="form-check-label" for="skill9">Problem Solving</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Critical Thinking" id="skill10">
+                                            <label class="form-check-label" for="skill10">Critical Thinking</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Interests Section -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold">Your Interests</label>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Technology" id="interest1">
+                                            <label class="form-check-label" for="interest1">Technology</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Healthcare" id="interest2">
+                                            <label class="form-check-label" for="interest2">Healthcare</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Finance" id="interest3">
+                                            <label class="form-check-label" for="interest3">Finance</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Education" id="interest4">
+                                            <label class="form-check-label" for="interest4">Education</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Business" id="interest5">
+                                            <label class="form-check-label" for="interest5">Business</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="Research" id="interest6">
+                                            <label class="form-check-label" for="interest6">Research</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Education Section -->
+                            <div class="mb-4">
+                                <label for="education" class="form-label fw-bold">Educational Background</label>
+                                <select class="form-select" id="education" name="education">
+                                    <option value="">Select your education level</option>
+                                    <option value="High School">High School</option>
+                                    <option value="Associate Degree">Associate Degree</option>
+                                    <option value="Bachelor's Degree">Bachelor's Degree</option>
+                                    <option value="Master's Degree">Master's Degree</option>
+                                    <option value="PhD">PhD</option>
+                                </select>
+                            </div>
+
+                            <!-- Experience Section -->
+                            <div class="mb-4">
+                                <label for="experience" class="form-label fw-bold">Work Experience</label>
+                                <select class="form-select" id="experience" name="experience">
+                                    <option value="">Select your experience level</option>
+                                    <option value="No experience">No experience</option>
+                                    <option value="1-2 years">1-2 years</option>
+                                    <option value="3-5 years">3-5 years</option>
+                                    <option value="6-10 years">6-10 years</option>
+                                    <option value="10+ years">10+ years</option>
+                                </select>
+                            </div>
+
+                            <!-- Goals Section -->
+                            <div class="mb-4">
+                                <label for="goals" class="form-label fw-bold">Career Goals</label>
+                                <textarea class="form-control" id="goals" name="goals" rows="3" placeholder="Tell us about your career aspirations and goals..."></textarea>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <i class="fas fa-search me-2"></i>Get Career Recommendations
+                                </button>
+                                <div class="mt-3">
+                                    <p class="text-muted">Want more accurate results?</p>
+                                    <button type="button" class="btn btn-outline-success" onclick="showSkillAssessment()">
+                                        <i class="fas fa-brain me-2"></i>Take AI Skill Assessment
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Section -->
+        <div class="loading text-center my-5">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h4 class="mt-3">Analyzing your profile...</h4>
+            <p>Our AI is processing your information to provide personalized recommendations.</p>
+        </div>
+
+        <!-- AI Skill Assessment Section -->
+        <div class="row mb-5" id="skillAssessmentSection" style="display: none;">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h4 class="mb-0"><i class="fas fa-brain me-2"></i>AI-Powered Skill Assessment</h4>
+                    </div>
+                    <div class="card-body">
+                        <div id="assessmentContainer">
+                            <div class="text-center py-5">
+                                <i class="fas fa-clipboard-check fa-3x text-success mb-3"></i>
+                                <h5>Comprehensive Skill Assessment</h5>
+                                <p class="text-muted">Take our AI-powered assessment to get personalized career recommendations</p>
+                                <button class="btn btn-success btn-lg" onclick="startSkillAssessment()">
+                                    <i class="fas fa-play me-2"></i>Start Assessment
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="result-section">
+            <!-- Skill Analysis -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4"><i class="fas fa-chart-pie me-2"></i>Skill Analysis</h3>
+                </div>
+                <div class="col-md-4">
+                    <div class="card text-center">
+                        <div class="card-body">
+                            <div class="progress-ring mx-auto mb-3">
+                                <svg class="progress-ring" width="120" height="120">
+                                    <circle class="background-circle" cx="60" cy="60" r="52"></circle>
+                                    <circle class="progress-circle" cx="60" cy="60" r="52" id="skillScoreCircle"></circle>
+                                </svg>
+                            </div>
+                            <h5>Skill Strength</h5>
+                            <h3 id="skillScore" class="text-primary">0%</h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">Your Skills</h6>
+                            <div id="matchedSkills"></div>
+                            <h6 class="card-title mt-3">Recommended Skills</h6>
+                            <div id="recommendedSkills"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Career Recommendations -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4"><i class="fas fa-briefcase me-2"></i>Career Recommendations</h3>
+                </div>
+                <div id="careerRecommendations" class="row"></div>
+            </div>
+
+            <!-- Learning Plan -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4"><i class="fas fa-graduation-cap me-2"></i>Personalized Learning Plan</h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recommended Courses</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="courseRecommendations"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Learning Timeline</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="learningTimeline"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Market Analysis -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4"><i class="fas fa-chart-line me-2"></i>Job Market Analysis</h3>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Industry Opportunities</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="marketOpportunities" class="row"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Emerging Trends</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="emergingTrends"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resume & Interview Prep -->
+            <div class="row mb-5">
+                <div class="col-12">
+                    <h3 class="mb-4"><i class="fas fa-file-alt me-2"></i>Resume & Interview Preparation</h3>
+                </div>
+                
+                <!-- Interactive Resume Builder -->
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fas fa-tools me-2"></i>Interactive Resume Builder</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="resumeBuilder"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Downloadable Templates -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-download me-2"></i>Downloadable Templates</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="downloadableTemplates"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- ATS Optimization Tools -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0"><i class="fas fa-search me-2"></i>ATS Optimization Tools</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="atsOptimization"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Resume Tips -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Resume Tips & Guidelines</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="resumeTips"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Interview Questions -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Interview Questions</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="interviewQuestions"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI Interview Preparation -->
+                <div class="col-12 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0"><i class="fas fa-microphone me-2"></i>AI-Powered Mock Interviews</h5>
+                        </div>
+                        <div class="card-body">
+                            <div id="aiInterviewPrep">
+                                <div class="text-center py-3">
+                                    <i class="fas fa-robot fa-2x text-warning mb-3"></i>
+                                    <h6>Practice with AI Feedback</h6>
+                                    <p class="text-muted small">Get personalized feedback and recommendations for your interview performance</p>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label small">Interview Type:</label>
+                                                <select class="form-select form-select-sm" id="interviewType">
+                                                    <option value="mixed">Mixed (Technical + Behavioral)</option>
+                                                    <option value="technical">Technical Only</option>
+                                                    <option value="behavioral">Behavioral Only</option>
+                                                    <option value="system_design">System Design</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label class="form-label small">Difficulty:</label>
+                                                <select class="form-select form-select-sm" id="interviewDifficulty">
+                                                    <option value="beginner">Beginner</option>
+                                                    <option value="intermediate" selected>Intermediate</option>
+                                                    <option value="advanced">Advanced</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-warning btn-lg" onclick="startMockInterview()">
+                                        <i class="fas fa-play me-2"></i>Start Mock Interview
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2024 AI Career Advisor. Powered by advanced AI technology.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('careerForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading
+            document.querySelector('.loading').style.display = 'block';
+            document.querySelector('.result-section').style.display = 'none';
+            
+            // Collect form data
+            const formData = {
+                skills: Array.from(document.querySelectorAll('input[id^="skill"]:checked')).map(cb => cb.value),
+                interests: Array.from(document.querySelectorAll('input[id^="interest"]:checked')).map(cb => cb.value),
+                education: document.getElementById('education').value,
+                experience: document.getElementById('experience').value,
+                goals: document.getElementById('goals').value
+            };
+            
+            try {
+                const response = await fetch('/api/analyze', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayResults(data);
+                } else {
+                    alert('Error: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                document.querySelector('.loading').style.display = 'none';
+                document.querySelector('.result-section').style.display = 'block';
+            }
+        });
+        
+        function displayResults(data) {
+            try {
+                // Display skill analysis
+                if (data.skill_analysis) {
+                    displaySkillAnalysis(data.skill_analysis);
+                }
+                
+                // Display career recommendations
+                if (data.career_recommendations) {
+                    displayCareerRecommendations(data.career_recommendations);
+                }
+                
+                // Display learning plan
+                if (data.learning_plan) {
+                    displayLearningPlan(data.learning_plan);
+                }
+                
+                // Display market analysis
+                if (data.market_analysis) {
+                    displayMarketAnalysis(data.market_analysis);
+                }
+                
+                // Display resume guidance
+                if (data.resume_guidance) {
+                    displayResumeGuidance(data.resume_guidance);
+                }
+                
+                // Display resume builder
+                if (data.resume_builder) {
+                    displayResumeBuilder(data.resume_builder);
+                }
+                
+                // Display downloadable templates
+                if (data.downloadable_templates) {
+                    displayDownloadableTemplates(data.downloadable_templates);
+                }
+                
+                // Display ATS optimization
+                if (data.ats_optimization) {
+                    displayATSOptimization(data.ats_optimization);
+                }
+            } catch (error) {
+                console.error('Error displaying results:', error);
+                alert('Error displaying results. Please try again.');
+            }
+        }
+        
+        function displaySkillAnalysis(analysis) {
+            // Update skill score
+            const score = analysis.skill_strength_score || 0;
+            document.getElementById('skillScore').textContent = score + '%';
+            
+            // Update progress circle
+            const circle = document.getElementById('skillScoreCircle');
+            const radius = 52;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (score / 100) * circumference;
+            circle.style.strokeDasharray = circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Display matched skills
+            const matchedSkillsDiv = document.getElementById('matchedSkills');
+            const matchedSkills = analysis.matched_skills || [];
+            matchedSkillsDiv.innerHTML = matchedSkills.map(skill => 
+                `<span class="skill-tag">${skill.name}</span>`
+            ).join('');
+            
+            // Display recommended skills
+            const recommendedSkillsDiv = document.getElementById('recommendedSkills');
+            const recommendedSkills = analysis.recommended_skills || [];
+            recommendedSkillsDiv.innerHTML = recommendedSkills.map(rec => 
+                `<span class="skill-tag">${rec.skill ? rec.skill.name : rec}</span>`
+            ).join('');
+        }
+        
+        function displayCareerRecommendations(recommendations) {
+            const container = document.getElementById('careerRecommendations');
+            const topCareers = recommendations.top_careers || [];
+            
+            // Display main career cards
+            container.innerHTML = topCareers.map(career => `
+                <div class="col-md-6 mb-4">
+                    <div class="card career-card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title">${career.title || 'Career Title'}</h5>
+                                <span class="badge bg-success fs-6">${career.compatibility_score || 0}% Match</span>
+                            </div>
+                            <p class="card-text">${career.description || 'Career description'}</p>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted">Salary Range</small>
+                                    <div class="fw-bold">${career.salary_range || 'Not specified'}</div>
+                            </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Growth Rate</small>
+                                    <div class="fw-bold">${career.growth_rate || 0}% annually</div>
+                            </div>
+                        </div>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted">Why Recommended:</small>
+                                <div class="small">${career.why_recommended || 'Good skill alignment'}</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted">Skill Match:</small>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar" style="width: ${career.skill_match_percentage || 0}%"></div>
+                                </div>
+                                <small class="text-muted">${career.skill_match_percentage || 0}% of required skills</small>
+                            </div>
+                            
+                            <button class="btn btn-outline-primary btn-sm" onclick="showCareerDetails('${career.title}')">
+                                <i class="fas fa-info-circle me-1"></i>View Details
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add detailed career analysis section
+            if (recommendations.detailed_career_analysis) {
+                addDetailedCareerAnalysis(recommendations.detailed_career_analysis);
+            }
+            
+            // Add career comparison section
+            if (recommendations.career_comparison) {
+                addCareerComparison(recommendations.career_comparison);
+            }
+            
+            // Add industry insights section
+            if (recommendations.industry_insights) {
+                addIndustryInsights(recommendations.industry_insights);
+            }
+            
+            // Add skill roadmap section
+            if (recommendations.skill_roadmap) {
+                addSkillRoadmap(recommendations.skill_roadmap);
+            }
+        }
+        
+        function addDetailedCareerAnalysis(detailedAnalysis) {
+            const analysisHtml = Object.entries(detailedAnalysis).map(([careerTitle, analysis]) => `
+                <div class="col-12 mb-4" id="career-details-${careerTitle.replace(/\s+/g, '-').toLowerCase()}">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5><i class="fas fa-chart-line me-2"></i>Detailed Analysis: ${careerTitle}</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>Career Progression</h6>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Entry Level:</strong> ${analysis.career_progression.entry_level}</li>
+                                        <li><strong>Senior Level:</strong> ${analysis.career_progression.senior_level}</li>
+                                        <li><strong>Leadership Path:</strong> ${analysis.career_progression.leadership_path}</li>
+                                        <li><strong>Timeline:</strong> ${analysis.career_progression.progression_timeline}</li>
+                                    </ul>
+                                    
+                                    <h6>Work Environment</h6>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Type:</strong> ${analysis.work_environment.type}</li>
+                                        <li><strong>Job Satisfaction:</strong> ${analysis.work_environment.job_satisfaction}/5</li>
+                                        <li><strong>Work-Life Balance:</strong> ${analysis.work_environment.work_life_balance}/5</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <h6>Market Demand</h6>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Demand Level:</strong> <span class="badge bg-${analysis.market_demand.demand_level === 'Very High' ? 'danger' : analysis.market_demand.demand_level === 'High' ? 'warning' : 'success'}">${analysis.market_demand.demand_level}</span></li>
+                                        <li><strong>Market Outlook:</strong> ${analysis.market_demand.market_outlook}</li>
+                                        <li><strong>Competition:</strong> ${analysis.market_demand.competition_level}</li>
+                                        <li><strong>Job Availability:</strong> ${analysis.market_demand.job_availability}</li>
+                                    </ul>
+                                    
+                                    <h6>Certifications</h6>
+                                    <div class="mb-2">
+                                        ${analysis.certifications.map(cert => `<span class="badge bg-info me-1 mb-1">${cert}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <h6>Alternative Roles</h6>
+                                <div class="mb-2">
+                                    ${analysis.alternative_roles.map(role => `<span class="badge bg-secondary me-1 mb-1">${role}</span>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Insert after career recommendations
+            const careerSection = document.querySelector('#careerRecommendations').parentElement;
+            careerSection.insertAdjacentHTML('afterend', `
+                <div class="row mb-5" id="detailedCareerAnalysis">
+                    <div class="col-12">
+                        <h3 class="mb-4"><i class="fas fa-microscope me-2"></i>Detailed Career Analysis</h3>
+                        ${analysisHtml}
+                    </div>
+                </div>
+            `);
+        }
+        
+        function addCareerComparison(comparison) {
+            if (comparison.careers && comparison.careers.length >= 2) {
+                const comparisonHtml = `
+                    <div class="row mb-5" id="careerComparison">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-balance-scale me-2"></i>Career Comparison</h3>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Criteria</th>
+                                            ${comparison.careers.map(career => `<th>${career.title}</th>`).join('')}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Compatibility Score</strong></td>
+                                            ${comparison.careers.map(career => `<td><span class="badge bg-success">${career.compatibility_score}%</span></td>`).join('')}
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Salary Range</strong></td>
+                                            ${comparison.careers.map(career => `<td>${career.salary_range}</td>`).join('')}
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Growth Rate</strong></td>
+                                            ${comparison.careers.map(career => `<td>${career.growth_rate}%</td>`).join('')}
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Work-Life Balance</strong></td>
+                                            ${comparison.careers.map(career => `<td>${career.work_life_balance}/5</td>`).join('')}
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Job Satisfaction</strong></td>
+                                            ${comparison.careers.map(career => `<td>${career.job_satisfaction}/5</td>`).join('')}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#detailedCareerAnalysis').insertAdjacentHTML('afterend', comparisonHtml);
+            }
+        }
+        
+        function addIndustryInsights(insights) {
+            const insightsHtml = Object.entries(insights).map(([industry, data]) => `
+                <div class="col-md-6 mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h6><i class="fas fa-industry me-2"></i>${data.industry_name}</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-2">
+                                <strong>Opportunities:</strong> ${data.total_opportunities} careers
+                            </div>
+                            <div class="mb-2">
+                                <strong>Average Growth:</strong> ${data.average_growth_rate}%
+                            </div>
+                            <div class="mb-2">
+                                <strong>Key Trends:</strong>
+                                <ul class="small mt-1">
+                                    ${data.key_trends.map(trend => `<li>${trend}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.querySelector('#careerComparison').insertAdjacentHTML('afterend', `
+                <div class="row mb-5" id="industryInsights">
+                    <div class="col-12">
+                        <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Industry Insights</h3>
+                        ${insightsHtml}
+                    </div>
+                </div>
+            `);
+        }
+        
+        function addSkillRoadmap(roadmap) {
+            const roadmapHtml = `
+                <div class="row mb-5" id="skillRoadmap">
+                    <div class="col-12">
+                        <h3 class="mb-4"><i class="fas fa-route me-2"></i>Skill Development Roadmap</h3>
+                        
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header bg-danger text-white">
+                                        <h6><i class="fas fa-fire me-2"></i>Immediate (0-3 months)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        ${roadmap.immediate_skills.map(skill => `
+                                            <div class="mb-2">
+                                                <strong>${skill.skill}</strong>
+                                                <div class="small text-muted">Priority: ${skill.priority} careers</div>
+                                                <div class="small text-muted">Time: ${skill.estimated_time}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header bg-warning text-dark">
+                                        <h6><i class="fas fa-clock me-2"></i>Short-term (3-6 months)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        ${roadmap.short_term_skills.map(skill => `
+                                            <div class="mb-2">
+                                                <strong>${skill.skill}</strong>
+                                                <div class="small text-muted">Priority: ${skill.priority} careers</div>
+                                                <div class="small text-muted">Time: ${skill.estimated_time}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header bg-info text-white">
+                                        <h6><i class="fas fa-target me-2"></i>Medium-term (6-12 months)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        ${roadmap.medium_term_skills.map(skill => `
+                                            <div class="mb-2">
+                                                <strong>${skill.skill}</strong>
+                                                <div class="small text-muted">Priority: ${skill.priority} careers</div>
+                                                <div class="small text-muted">Time: ${skill.estimated_time}</div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.querySelector('#industryInsights').insertAdjacentHTML('afterend', roadmapHtml);
+        }
+        
+        function showCareerDetails(careerTitle) {
+            const detailsElement = document.getElementById(`career-details-${careerTitle.replace(/\s+/g, '-').toLowerCase()}`);
+            if (detailsElement) {
+                detailsElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        function displayLearningPlan(plan) {
+            // Display enhanced course recommendations
+            const coursesDiv = document.getElementById('courseRecommendations');
+            const courses = plan.course_recommendations || [];
+            coursesDiv.innerHTML = courses.map(course => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title mb-0">${course.course ? course.course.title : 'Course Title'}</h6>
+                    <span class="badge bg-primary">${course.skill || 'Skill'}</span>
+                        </div>
+                        <p class="text-muted small mb-2">
+                            <i class="fas fa-graduation-cap me-1"></i>${course.course ? course.course.platform : 'Platform'} 
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-clock me-1"></i>${course.course ? course.course.duration : 'Duration'}
+                            <span class="mx-2">•</span>
+                            <i class="fas fa-star me-1"></i>${course.course ? course.course.rating : '4.5'}/5
+                        </p>
+                        <p class="small mb-2">${course.course ? course.course.description : 'Course description'}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="badge bg-${course.course && course.course.cost === 'Free' ? 'success' : 'warning'}">
+                                    ${course.course ? course.course.cost : 'Paid'}
+                                </span>
+                                <span class="badge bg-info ms-1">Priority: ${course.priority || 'Medium'}</span>
+                            </div>
+                            <div>
+                                <a href="${course.course ? course.course.url : '#'}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-external-link-alt me-1"></i>View Course
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Display enhanced timeline
+            const timelineDiv = document.getElementById('learningTimeline');
+            const timeline = plan.learning_timeline || [];
+            timelineDiv.innerHTML = timeline.map(item => `
+                <div class="timeline-item">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-0">${item.title || 'Timeline Item'}</h6>
+                        <span class="badge bg-${item.phase === 'Foundation Building' ? 'primary' : item.phase === 'Skill Application' ? 'success' : item.phase === 'Advanced Learning' ? 'warning' : 'info'}">${item.phase || 'Phase'}</span>
+                    </div>
+                    <p class="text-muted small mb-2">
+                        <i class="fas fa-calendar me-1"></i>${item.week || 'Timeline'} 
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-laptop me-1"></i>${item.platform || 'Platform'}
+                        <span class="mx-2">•</span>
+                        <i class="fas fa-tag me-1"></i>${item.skill || 'Skill'}
+                    </p>
+                    <p class="small mb-2">${item.description || 'Description'}</p>
+                    <div class="d-flex gap-2 mb-2">
+                        <span class="badge bg-info">${item.activity || 'Activity'}</span>
+                        <span class="badge bg-${item.cost === 'Free' ? 'success' : 'warning'}">${item.cost || 'Cost'}</span>
+                    </div>
+                    ${item.deliverables ? `
+                        <div class="mt-2">
+                            <small class="text-muted"><strong>Deliverables:</strong></small>
+                            <ul class="small mt-1">
+                                ${item.deliverables.map(d => `<li>${d}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+            
+            // Add additional learning plan sections
+            addLearningMetrics(plan);
+            addStudySchedule(plan);
+            addLearningGoals(plan);
+        }
+        
+        function addLearningMetrics(plan) {
+            if (plan.learning_metrics) {
+                const metricsHtml = `
+                    <div class="row mb-5" id="learningMetrics">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-chart-line me-2"></i>Learning Metrics & Milestones</h3>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-primary">${plan.learning_metrics.total_skills_to_develop || 0}</h4>
+                                            <p class="card-text">Skills to Develop</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-success">${plan.learning_metrics.courses_to_complete || 0}</h4>
+                                            <p class="card-text">Courses to Complete</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-warning">${plan.learning_metrics.certifications_to_earn || 0}</h4>
+                                            <p class="card-text">Certifications to Earn</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-info">${plan.learning_metrics.weekly_commitment || '10 hours'}</h4>
+                                            <p class="card-text">Weekly Commitment</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h6>Success Metrics</h6>
+                                    <ul class="list-unstyled">
+                                        ${(plan.learning_metrics.success_metrics || []).map(metric => `
+                                            <li><i class="fas fa-check text-success me-2"></i>${metric}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Key Milestones</h6>
+                                    <ul class="list-unstyled">
+                                        ${(plan.learning_metrics.milestones || []).map(milestone => `
+                                            <li><i class="fas fa-flag text-primary me-2"></i>${milestone}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#learningTimeline').parentElement.insertAdjacentHTML('afterend', metricsHtml);
+            }
+        }
+        
+        function addStudySchedule(plan) {
+            if (plan.study_schedule) {
+                const scheduleHtml = `
+                    <div class="row mb-5" id="studySchedule">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-calendar-alt me-2"></i>Personalized Study Schedule</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fas fa-clock me-2"></i>Weekly Schedule</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Total Hours:</strong> ${plan.study_schedule.weekly_hours || 10} hours/week
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Study Days:</strong> ${(plan.study_schedule.study_days || []).join(', ')}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Recommended Times:</strong> ${plan.study_schedule.recommended_times || 'Evenings'}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Break Schedule:</strong> ${plan.study_schedule.break_schedule || '10-minute break every 50 minutes'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fas fa-calendar-day me-2"></i>Daily Schedule</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            ${Object.entries(plan.study_schedule.daily_schedule || {}).map(([day, schedule]) => `
+                                                <div class="mb-2">
+                                                    <strong>${day}:</strong> ${schedule}
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#learningMetrics').insertAdjacentHTML('afterend', scheduleHtml);
+            }
+        }
+        
+        function addLearningGoals(plan) {
+            if (plan.learning_goals) {
+                const goalsHtml = `
+                    <div class="row mb-5" id="learningGoals">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-target me-2"></i>Learning Goals & Objectives</h3>
+                            <div class="row">
+                                ${(plan.learning_goals || []).map(goal => `
+                                    <div class="col-md-4 mb-3">
+                                        <div class="card">
+                                            <div class="card-header bg-${goal.timeline.includes('Short-term') ? 'success' : goal.timeline.includes('Medium-term') ? 'warning' : 'info'} text-white">
+                                                <h6 class="mb-0">${goal.timeline}</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <h6>${goal.goal}</h6>
+                                                <p class="small text-muted">${goal.measurement}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#studySchedule').insertAdjacentHTML('afterend', goalsHtml);
+            }
+        }
+        
+        function displayMarketAnalysis(analysis) {
+            // Display enhanced industry opportunities
+            const opportunitiesDiv = document.getElementById('marketOpportunities');
+            const opportunities = analysis.industry_opportunities || {};
+            opportunitiesDiv.innerHTML = Object.entries(opportunities).map(([industry, data]) => `
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h6 class="card-title">${industry.charAt(0).toUpperCase() + industry.slice(1)}</h6>
+                                <span class="badge bg-${data.opportunity_score > 70 ? 'success' : data.opportunity_score > 50 ? 'warning' : 'secondary'}">${data.opportunity_score}%</span>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <small class="text-muted">Growth Rate</small>
+                                    <div class="fw-bold">${data.growth_rate}%</div>
+                                </div>
+                                <div class="col-6">
+                                    <small class="text-muted">Job Openings</small>
+                                    <div class="fw-bold">${data.job_openings.toLocaleString()}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <small class="text-muted">Skill Match</small>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar" style="width: ${data.skill_match_percentage}%"></div>
+                                </div>
+                                <small class="text-muted">${data.skill_match_percentage}% of demand skills</small>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <small class="text-muted">Competition Level:</small>
+                                <span class="badge bg-${data.competition_level === 'high' ? 'danger' : data.competition_level === 'medium' ? 'warning' : 'success'} ms-1">${data.competition_level}</span>
+                            </div>
+                            
+                            <div class="mb-2">
+                                <small class="text-muted">Salary Trend:</small>
+                                <span class="badge bg-${data.salary_trend === 'increasing' ? 'success' : 'secondary'} ms-1">${data.salary_trend}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Display enhanced emerging trends
+            const trendsDiv = document.getElementById('emergingTrends');
+            const trends = analysis.emerging_trends || [];
+            trendsDiv.innerHTML = trends.map(trend => `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="card-title mb-0">${trend.trend}</h6>
+                            <span class="badge bg-${trend.relevance === 'high' ? 'success' : 'warning'}">${trend.relevance}</span>
+                        </div>
+                        <p class="text-muted small mb-2">${trend.description}</p>
+                        <p class="small mb-0"><strong>Impact:</strong> ${trend.impact}</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Add additional market insights sections
+            addRealTimeIndicators(analysis);
+            addMarketForecast(analysis);
+            addRemoteWorkAnalysis(analysis);
+            addEmergingRoles(analysis);
+            addSkillTrends(analysis);
+            addGeographicInsights(analysis);
+        }
+        
+        function addRealTimeIndicators(analysis) {
+            if (analysis.real_time_indicators) {
+                const indicatorsHtml = `
+                    <div class="row mb-5" id="realTimeIndicators">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-chart-line me-2"></i>Real-Time Market Indicators</h3>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-primary">${analysis.real_time_indicators.market_health_score}</h4>
+                                            <p class="card-text">Market Health Score</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-success">${analysis.real_time_indicators.trending_skills.length}</h4>
+                                            <p class="card-text">Trending Skills</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-warning">${analysis.real_time_indicators.declining_skills.length}</h4>
+                                            <p class="card-text">Declining Skills</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card text-center">
+                                        <div class="card-body">
+                                            <h4 class="text-info">${analysis.real_time_indicators.remote_work_distribution.fully_remote}%</h4>
+                                            <p class="card-text">Fully Remote Jobs</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h6>Trending Skills</h6>
+                                    <div class="mb-2">
+                                        ${analysis.real_time_indicators.trending_skills.map(skill => `
+                                            <span class="badge bg-success me-1 mb-1">${skill}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Declining Skills</h6>
+                                    <div class="mb-2">
+                                        ${analysis.real_time_indicators.declining_skills.map(skill => `
+                                            <span class="badge bg-danger me-1 mb-1">${skill}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>Last updated: ${analysis.real_time_indicators.last_updated}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#emergingTrends').parentElement.insertAdjacentHTML('afterend', indicatorsHtml);
+            }
+        }
+        
+        function addMarketForecast(analysis) {
+            if (analysis.market_forecast) {
+                const forecastHtml = `
+                    <div class="row mb-5" id="marketForecast">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-crystal-ball me-2"></i>Market Forecast</h3>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h6><i class="fas fa-calendar-week me-2"></i>${analysis.market_forecast.short_term_forecast.timeline}</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">${analysis.market_forecast.short_term_forecast.prediction}</p>
+                                            <div class="mb-2">
+                                                <small class="text-muted">Confidence: </small>
+                                                <span class="badge bg-success">${analysis.market_forecast.short_term_forecast.confidence}</span>
+                                            </div>
+                                            <h6>Key Factors:</h6>
+                                            <ul class="small">
+                                                ${analysis.market_forecast.short_term_forecast.key_factors.map(factor => `<li>${factor}</li>`).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h6><i class="fas fa-calendar-alt me-2"></i>${analysis.market_forecast.medium_term_forecast.timeline}</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">${analysis.market_forecast.medium_term_forecast.prediction}</p>
+                                            <div class="mb-2">
+                                                <small class="text-muted">Confidence: </small>
+                                                <span class="badge bg-warning">${analysis.market_forecast.medium_term_forecast.confidence}</span>
+                                            </div>
+                                            <h6>Key Factors:</h6>
+                                            <ul class="small">
+                                                ${analysis.market_forecast.medium_term_forecast.key_factors.map(factor => `<li>${factor}</li>`).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <div class="card">
+                                        <div class="card-header bg-info text-white">
+                                            <h6><i class="fas fa-calendar me-2"></i>${analysis.market_forecast.long_term_forecast.timeline}</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="card-text">${analysis.market_forecast.long_term_forecast.prediction}</p>
+                                            <div class="mb-2">
+                                                <small class="text-muted">Confidence: </small>
+                                                <span class="badge bg-info">${analysis.market_forecast.long_term_forecast.confidence}</span>
+                                            </div>
+                                            <h6>Key Factors:</h6>
+                                            <ul class="small">
+                                                ${analysis.market_forecast.long_term_forecast.key_factors.map(factor => `<li>${factor}</li>`).join('')}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#realTimeIndicators').insertAdjacentHTML('afterend', forecastHtml);
+            }
+        }
+        
+        function addRemoteWorkAnalysis(analysis) {
+            if (analysis.remote_work_analysis) {
+                const remoteHtml = `
+                    <div class="row mb-5" id="remoteWorkAnalysis">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-home me-2"></i>Remote Work Analysis</h3>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fas fa-chart-pie me-2"></i>Remote Work Distribution</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Fully Remote:</strong> ${analysis.remote_work_analysis.current_distribution.fully_remote}%
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Hybrid:</strong> ${analysis.remote_work_analysis.current_distribution.hybrid}%
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Office Only:</strong> ${analysis.remote_work_analysis.current_distribution.office_only}%
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fas fa-trending-up me-2"></i>Trend Analysis</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Fully Remote Growth:</strong> <span class="text-success">${analysis.remote_work_analysis.trend_analysis.fully_remote_growth}</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Hybrid Adoption:</strong> <span class="text-success">${analysis.remote_work_analysis.trend_analysis.hybrid_adoption}</span>
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Office Only Decline:</strong> <span class="text-danger">${analysis.remote_work_analysis.trend_analysis.office_only_decline}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h6>Remote Work Benefits</h6>
+                                    <ul class="list-unstyled">
+                                        ${analysis.remote_work_analysis.remote_work_benefits.map(benefit => `
+                                            <li><i class="fas fa-check text-success me-2"></i>${benefit}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>Remote Work Challenges</h6>
+                                    <ul class="list-unstyled">
+                                        ${analysis.remote_work_analysis.remote_work_challenges.map(challenge => `
+                                            <li><i class="fas fa-exclamation-triangle text-warning me-2"></i>${challenge}</li>
+                                        `).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#marketForecast').insertAdjacentHTML('afterend', remoteHtml);
+            }
+        }
+        
+        function addEmergingRoles(analysis) {
+            if (analysis.emerging_roles && analysis.emerging_roles.length > 0) {
+                const rolesHtml = `
+                    <div class="row mb-5" id="emergingRoles">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-rocket me-2"></i>Emerging Roles</h3>
+                            <div class="row">
+                                ${analysis.emerging_roles.map(role => `
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <h6 class="card-title mb-0">${role.role}</h6>
+                                                    <span class="badge bg-success">${role.growth_potential}</span>
+                                                </div>
+                                                <p class="text-muted small mb-2">${role.industry}</p>
+                                                <p class="small mb-2">${role.description}</p>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <small class="text-muted">Skill Match:</small>
+                                                        <div class="fw-bold">${role.user_skill_match} skills</div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted">Remote:</small>
+                                                        <div class="fw-bold">${role.remote_opportunities}%</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">Salary:</small>
+                                                    <div class="fw-bold">${role.salary_range}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#remoteWorkAnalysis').insertAdjacentHTML('afterend', rolesHtml);
+            }
+        }
+        
+        function addSkillTrends(analysis) {
+            if (analysis.skill_trends) {
+                const trendsHtml = `
+                    <div class="row mb-5" id="skillTrends">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-chart-bar me-2"></i>Skill Trends Analysis</h3>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h6><i class="fas fa-fire me-2"></i>Hot Skills</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Growth Rate:</strong> ${analysis.skill_trends.hot_skills.growth_rate}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Salary Premium:</strong> ${analysis.skill_trends.hot_skills.salary_premium}
+                                            </div>
+                                            <div class="mb-2">
+                                                ${analysis.skill_trends.hot_skills.skills.map(skill => `
+                                                    <span class="badge bg-success me-1 mb-1">${skill}</span>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-header bg-danger text-white">
+                                            <h6><i class="fas fa-arrow-down me-2"></i>Declining Skills</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Decline Rate:</strong> ${analysis.skill_trends.declining_skills.decline_rate}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Recommendation:</strong> ${analysis.skill_trends.declining_skills.recommendation}
+                                            </div>
+                                            <div class="mb-2">
+                                                ${analysis.skill_trends.declining_skills.skills.map(skill => `
+                                                    <span class="badge bg-danger me-1 mb-1">${skill}</span>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-header bg-info text-white">
+                                            <h6><i class="fas fa-balance-scale me-2"></i>Stable Skills</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Demand Level:</strong> ${analysis.skill_trends.stable_skills.demand_level}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Recommendation:</strong> ${analysis.skill_trends.stable_skills.recommendation}
+                                            </div>
+                                            <div class="mb-2">
+                                                ${analysis.skill_trends.stable_skills.skills.map(skill => `
+                                                    <span class="badge bg-info me-1 mb-1">${skill}</span>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-3">
+                                    <div class="card">
+                                        <div class="card-header bg-warning text-dark">
+                                            <h6><i class="fas fa-crystal-ball me-2"></i>Future Skills</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Timeline:</strong> ${analysis.skill_trends.future_skills.emergence_timeline}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Recommendation:</strong> ${analysis.skill_trends.future_skills.recommendation}
+                                            </div>
+                                            <div class="mb-2">
+                                                ${analysis.skill_trends.future_skills.skills.map(skill => `
+                                                    <span class="badge bg-warning me-1 mb-1">${skill}</span>
+                                                `).join('')}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#emergingRoles').insertAdjacentHTML('afterend', trendsHtml);
+            }
+        }
+        
+        function addGeographicInsights(analysis) {
+            if (analysis.geographic_insights) {
+                const geoHtml = `
+                    <div class="row mb-5" id="geographicInsights">
+                        <div class="col-12">
+                            <h3 class="mb-4"><i class="fas fa-map-marker-alt me-2"></i>Geographic Insights</h3>
+                            <div class="row">
+                                ${Object.entries(analysis.geographic_insights.top_cities).map(([city, data]) => `
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h6 class="card-title">${city}</h6>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <small class="text-muted">Tech Jobs</small>
+                                                        <div class="fw-bold">${data.tech_jobs.toLocaleString()}</div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted">Avg Salary</small>
+                                                        <div class="fw-bold">${data.average_salary}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-6">
+                                                        <small class="text-muted">Growth Rate</small>
+                                                        <div class="fw-bold text-success">${data.growth_rate}</div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <small class="text-muted">Cost of Living</small>
+                                                        <div class="fw-bold">${analysis.geographic_insights.cost_of_living[city]}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">Key Industries:</small>
+                                                    <div>
+                                                        ${data.key_industries.map(industry => `
+                                                            <span class="badge bg-secondary me-1 mb-1">${industry}</span>
+                                                        `).join('')}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6><i class="fas fa-globe me-2"></i>Remote Opportunities</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-2">
+                                                <strong>Global Remote:</strong> ${analysis.geographic_insights.remote_opportunities.global_remote}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Domestic Remote:</strong> ${analysis.geographic_insights.remote_opportunities.domestic_remote}
+                                            </div>
+                                            <div class="mb-2">
+                                                <strong>Freelance Market:</strong> ${analysis.geographic_insights.remote_opportunities.freelance_market}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                document.querySelector('#skillTrends').insertAdjacentHTML('afterend', geoHtml);
+            }
+        }
+        
+        function displayResumeGuidance(guidance) {
+            // Display resume tips
+            const tipsDiv = document.getElementById('resumeTips');
+            const tips = guidance.formatting_tips || [];
+            tipsDiv.innerHTML = `
+                <div class="mb-3">
+                    <h6><i class="fas fa-edit me-2"></i>Formatting Tips</h6>
+                    ${tips.map(tip => `<div class="mb-2"><i class="fas fa-check text-success me-2"></i>${tip}</div>`).join('')}
+                </div>
+                
+                <div class="mb-3">
+                    <h6><i class="fas fa-exclamation-triangle me-2"></i>Common Mistakes to Avoid</h6>
+                    ${(guidance.common_mistakes || []).map(mistake => `<div class="mb-2"><i class="fas fa-times text-danger me-2"></i>${mistake}</div>`).join('')}
+                </div>
+                
+                <div class="mb-3">
+                    <h6><i class="fas fa-key me-2"></i>Powerful Action Verbs</h6>
+                    <div class="row">
+                        ${Object.entries(guidance.action_verbs || {}).map(([category, verbs]) => `
+                            <div class="col-md-6 mb-2">
+                                <strong>${category.charAt(0).toUpperCase() + category.slice(1)}:</strong><br>
+                                <small class="text-muted">${verbs.join(', ')}</small>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Display interview questions
+            const questionsDiv = document.getElementById('interviewQuestions');
+            const questions = guidance.interview_preparation ? guidance.interview_preparation.technical_questions : [];
+            questionsDiv.innerHTML = questions.map(q => `
+                <div class="mb-4 p-3 border rounded">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-1">${q.question || 'Question'}</h6>
+                        <div>
+                            <span class="badge bg-${q.difficulty === 'Hard' ? 'danger' : q.difficulty === 'Medium' ? 'warning' : 'success'} me-2">${q.difficulty || 'Medium'}</span>
+                            <span class="badge bg-info">${q.category || 'Technical'}</span>
+                        </div>
+                    </div>
+                    <p class="text-muted small mb-2"><strong>Sample Answer:</strong> ${q.sample_answer || 'Answer'}</p>
+                    ${q.follow_up ? `<p class="text-muted small mb-2"><strong>Follow-up:</strong> ${q.follow_up}</p>` : ''}
+                    ${q.key_points ? `
+                        <div class="mt-2">
+                            <small class="text-muted"><strong>Key Points:</strong></small>
+                            <ul class="small mt-1">
+                                ${q.key_points.map(point => `<li>${point}</li>`).join('')}
+                            </ul>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+        
+        function displayResumeBuilder(builder) {
+            const builderDiv = document.getElementById('resumeBuilder');
+            
+            if (!builder || !builder.resume_sections) {
+                builderDiv.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-tools fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Interactive Resume Builder</h5>
+                        <p class="text-muted">Fill out the form above to get personalized resume building tools</p>
+                        <button class="btn btn-primary" onclick="scrollToForm()">
+                            <i class="fas fa-arrow-up me-2"></i>Go to Form
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const sections = builder.resume_sections || {};
+            const suggestions = builder.real_time_suggestions || {};
+            
+            builderDiv.innerHTML = `
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="resume-builder-form">
+                            <h6 class="mb-3">Build Your Resume Step by Step</h6>
+                            
+                            <!-- Contact Information -->
+                            <div class="mb-4">
+                                <h6><i class="fas fa-user me-2"></i>${sections.header?.title || 'Contact Information'}</h6>
+                                <div class="row">
+                                    ${(sections.header?.fields || []).map(field => `
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">${field.label} ${field.required ? '*' : ''}</label>
+                                            <input type="${field.type}" class="form-control" 
+                                                   name="${(field.name || field.label || '').toLowerCase().replace(/[^a-z0-9]+/g, '_')}" 
+                                                   placeholder="${field.placeholder || ''}" 
+                                                   ${field.required ? 'required' : ''}>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                            
+                            <!-- Professional Summary -->
+                            <div class="mb-4">
+                                <h6><i class="fas fa-file-text me-2"></i>${sections.summary?.title || 'Professional Summary'}</h6>
+                                <div class="mb-3">
+                                    <label class="form-label">Summary *</label>
+                                    <textarea class="form-control" rows="3" name="summary"
+                                              placeholder="${sections.summary?.fields?.[0]?.placeholder || ''}"
+                                              maxlength="200" oninput="updateCharacterCount(this)"></textarea>
+                                    <small class="text-muted">Character count: <span id="summaryCount">0</span>/200</small>
+                                </div>
+                                ${sections.summary?.fields?.[0]?.suggestions ? `
+                                    <div class="suggestions">
+                                        <small class="text-muted">Suggestions:</small>
+                                        <div class="mt-2">
+                                            ${sections.summary.fields[0].suggestions.map(suggestion => `
+                                                <button class="btn btn-sm btn-outline-primary me-2 mb-2 suggestion-btn" 
+                                                        onclick="useSuggestion('summary', '${suggestion.replace(/'/g, "\\'")}')">
+                                                    Use This
+                                                </button>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            
+                            <!-- Skills Section -->
+                            <div class="mb-4">
+                                <h6><i class="fas fa-cogs me-2"></i>${sections.skills?.title || 'Skills'}</h6>
+                                <div class="row">
+                                    ${(sections.skills?.fields || []).map(field => `
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">${field.label} *</label>
+                                            <input type="text" class="form-control" 
+                                                   name="${field.label.toLowerCase().includes('technical') ? 'technical_skills' : field.label.toLowerCase().includes('soft') ? 'soft_skills' : 'tools'}"
+                                                   placeholder="Enter ${field.label.toLowerCase()} (comma-separated)">
+                                            <small class="text-muted">Press Enter to add tags</small>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+
+                            <!-- Experience Section (Simple) -->
+                            <div class="mb-4">
+                                <h6><i class="fas fa-briefcase me-2"></i>Experience</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Job Title</label>
+                                        <input type="text" class="form-control" name="exp_job_title" placeholder="e.g., Software Engineer">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Company</label>
+                                        <input type="text" class="form-control" name="exp_company" placeholder="e.g., ABC Pvt Ltd">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Location</label>
+                                        <input type="text" class="form-control" name="exp_location" placeholder="City, State">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Start Date</label>
+                                        <input type="text" class="form-control" name="exp_start" placeholder="YYYY-MM">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">End Date</label>
+                                        <input type="text" class="form-control" name="exp_end" placeholder="YYYY-MM or Present">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Key Achievements (one per line)</label>
+                                        <textarea class="form-control" rows="3" name="exp_achievements" placeholder="Improved X by Y%\nBuilt Z feature ..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Education Section (Simple) -->
+                            <div class="mb-4">
+                                <h6><i class="fas fa-graduation-cap me-2"></i>Education</h6>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Degree</label>
+                                        <input type="text" class="form-control" name="edu_degree" placeholder="e.g., B.Tech">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Major</label>
+                                        <input type="text" class="form-control" name="edu_major" placeholder="e.g., Computer Science">
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">University</label>
+                                        <input type="text" class="form-control" name="edu_university" placeholder="e.g., IIT Bombay">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Graduation Year</label>
+                                        <input type="text" class="form-control" name="edu_year" placeholder="e.g., 2024">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">GPA</label>
+                                        <input type="text" class="form-control" name="edu_gpa" placeholder="e.g., 8.2/10">
+                                    </div>
+                                    <div class="col-12 mb-3">
+                                        <label class="form-label">Academic Achievements (one per line)</label>
+                                        <textarea class="form-control" rows="3" name="edu_achievements" placeholder="Dean's List\nScholarship ..."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <div class="form-check d-inline-block mb-3">
+                                    <input class="form-check-input" type="checkbox" id="useAiEnhance" checked>
+                                    <label class="form-check-label" for="useAiEnhance">Enhance with AI (Gemini)</label>
+                                </div>
+                                <button class="btn btn-primary btn-lg" onclick="generateResume()">
+                                    <i class="fas fa-magic me-2"></i>Generate Resume
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="resume-suggestions">
+                            <h6 class="mb-3">Real-time Suggestions</h6>
+                            
+                            <!-- ATS Score -->
+                            <div class="mb-3">
+                                <h6>ATS Optimization Score</h6>
+                                <div class="progress mb-2">
+                                    <div class="progress-bar" style="width: ${suggestions.ats_score?.overall_score || 0}%">
+                                        ${suggestions.ats_score?.overall_score || 0}%
+                                    </div>
+                                </div>
+                                <small class="text-muted">${suggestions.ats_score?.recommendations?.[0] || 'Keep improving your resume'}</small>
+                            </div>
+                            
+                            <!-- Keyword Suggestions -->
+                            <div class="mb-3">
+                                <h6>Keyword Suggestions</h6>
+                                <div class="mb-2">
+                                    <small class="text-muted">High Priority:</small>
+                                    <div class="mt-1">
+                                        ${(suggestions.keyword_optimization?.high_priority || []).map(keyword => `
+                                            <span class="badge bg-danger me-1 mb-1">${keyword}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                                <div class="mb-2">
+                                    <small class="text-muted">Medium Priority:</small>
+                                    <div class="mt-1">
+                                        ${(suggestions.keyword_optimization?.medium_priority || []).map(keyword => `
+                                            <span class="badge bg-warning me-1 mb-1">${keyword}</span>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Verbs -->
+                            <div class="mb-3">
+                                <h6>Action Verbs</h6>
+                                ${Object.entries(suggestions.action_verbs || {}).map(([category, verbs]) => `
+                                    <div class="mb-2">
+                                        <small class="text-muted">${category.charAt(0).toUpperCase() + category.slice(1)}:</small>
+                                        <div class="mt-1">
+                                            ${verbs.map(verb => `
+                                                <span class="badge bg-info me-1 mb-1">${verb}</span>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function displayDownloadableTemplates(templates) {
+            const templatesDiv = document.getElementById('downloadableTemplates');
+            
+            if (!templates || !templates.templates) {
+                templatesDiv.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-download fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Downloadable Templates</h5>
+                        <p class="text-muted">Fill out the form above to get personalized resume templates</p>
+                        <button class="btn btn-primary" onclick="scrollToForm()">
+                            <i class="fas fa-arrow-up me-2"></i>Go to Form
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            const templateList = templates.templates || [];
+            
+            templatesDiv.innerHTML = templateList.map(template => `
+                <div class="mb-3 p-3 border rounded">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="mb-1">${template.name}</h6>
+                        <span class="badge bg-primary">${template.file_format}</span>
+                    </div>
+                    <p class="text-muted small mb-2">${template.description}</p>
+                    <div class="mb-2">
+                        <small class="text-muted">Suitable for:</small>
+                        <div class="mt-1">
+                            ${template.suitable_for.map(role => `
+                                <span class="badge bg-secondary me-1 mb-1">${role}</span>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Features:</small>
+                        <ul class="small mt-1">
+                            ${template.features.map(feature => `<li>${feature}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-sm btn-outline-primary" onclick="previewTemplate('${template.name}')">
+                            <i class="fas fa-eye me-1"></i>Preview
+                        </button>
+                        <button class="btn btn-sm btn-primary" onclick="downloadTemplate('${template.name}')">
+                            <i class="fas fa-download me-1"></i>Download
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function displayATSOptimization(ats) {
+            const atsDiv = document.getElementById('atsOptimization');
+            
+            if (!ats) {
+                atsDiv.innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">ATS Optimization Tools</h5>
+                        <p class="text-muted">Fill out the form above to get personalized ATS optimization tools</p>
+                        <button class="btn btn-primary" onclick="scrollToForm()">
+                            <i class="fas fa-arrow-up me-2"></i>Go to Form
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            atsDiv.innerHTML = `
+                <div class="mb-3">
+                    <h6><i class="fas fa-search me-2"></i>${ats.keyword_analyzer?.title || 'Keyword Analyzer'}</h6>
+                    <p class="text-muted small mb-2">${ats.keyword_analyzer?.description || ''}</p>
+                    <ul class="small">
+                        ${(ats.keyword_analyzer?.features || []).map(feature => `<li>${feature}</li>`).join('')}
+                    </ul>
+                    <button class="btn btn-sm btn-outline-primary" onclick="analyzeResume()">
+                        <i class="fas fa-search me-1"></i>Analyze Resume
+                    </button>
+                </div>
+                
+                <div class="mb-3">
+                    <h6><i class="fas fa-check-circle me-2"></i>${ats.format_checker?.title || 'Format Checker'}</h6>
+                    <p class="text-muted small mb-2">${ats.format_checker?.description || ''}</p>
+                    <ul class="small">
+                        ${(ats.format_checker?.checks || []).map(check => `<li>${check}</li>`).join('')}
+                    </ul>
+                    <button class="btn btn-sm btn-outline-success" onclick="checkFormat()">
+                        <i class="fas fa-check me-1"></i>Check Format
+                    </button>
+                </div>
+                
+                <div class="mb-3">
+                    <h6><i class="fas fa-upload me-2"></i>${ats.job_matching?.title || 'Job Matching'}</h6>
+                    <p class="text-muted small mb-2">${ats.job_matching?.description || ''}</p>
+                    <div class="mb-2">
+                        <input type="file" class="form-control form-control-sm" accept=".pdf,.doc,.docx" id="jobDescriptionFile">
+                        <small class="text-muted">Upload job description for analysis</small>
+                    </div>
+                    <button class="btn btn-sm btn-outline-info" onclick="matchResume()">
+                        <i class="fas fa-link me-1"></i>Match Resume
+                    </button>
+                </div>
+            `;
+        }
+        
+        function useSuggestion(fieldType, suggestion) {
+            // This function would be used to apply suggestions to form fields
+            console.log(`Using suggestion for ${fieldType}:`, suggestion);
+            // Implementation would update the corresponding form field
+        }
+        
+        function scrollToForm() {
+            document.getElementById('careerForm').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        async function generateResume() {
+            try {
+                // Collect resume data from the form
+                const resumeData = collectResumeData();
+                
+                // Show loading state
+                const generateBtn = document.querySelector('button[onclick="generateResume()"]');
+                const originalText = generateBtn.innerHTML;
+                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
+                generateBtn.disabled = true;
+                
+                // Send data to backend
+                const response = await fetch('/api/generate-resume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(resumeData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Display the generated resume and pass download URL
+                    displayGeneratedResume(result.resume_content, result.download_url);
+                } else {
+                    alert('Error generating resume: ' + (result.error || 'Unknown error'));
+                }
+                
+            } catch (error) {
+                alert('Error generating resume: ' + error.message);
+            } finally {
+                // Reset button state
+                const generateBtn = document.querySelector('button[onclick="generateResume()"]');
+                generateBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate Resume';
+                generateBtn.disabled = false;
+            }
+        }
+        
+        function collectResumeData() {
+            const personalInfo = {};
+            const experience = [];
+            const education = [];
+            const skills = {};
+            const projects = [];
+            
+            // Collect personal information
+            const personalFields = document.querySelectorAll('.resume-builder-form input[type="text"], .resume-builder-form input[type="email"], .resume-builder-form input[type="tel"], .resume-builder-form input[type="url"]');
+            personalFields.forEach(field => {
+                if (field.name) {
+                    personalInfo[field.name] = field.value;
+                }
+            });
+            // Ensure expected keys exist (map common names)
+            personalInfo.full_name = personalInfo.full_name || personalInfo.name || personalInfo.fullname || '';
+            personalInfo.email = personalInfo.email || personalInfo.mail || '';
+            personalInfo.phone = personalInfo.phone || personalInfo.mobile || '';
+            personalInfo.linkedin = personalInfo.linkedin || personalInfo.linked_in || '';
+            personalInfo.github = personalInfo.github || personalInfo.git || '';
+            personalInfo.location = personalInfo.location || personalInfo.city || '';
+            
+            // Collect summary
+            const summary = (document.querySelector('.resume-builder-form textarea[name="summary"]')?.value
+                           || document.querySelector('.resume-builder-form textarea')?.value
+                           || '');
+
+            // Collect experience (single entry for now)
+            const expJob = document.querySelector('.resume-builder-form input[name="exp_job_title"]').value || '';
+            const expCompany = document.querySelector('.resume-builder-form input[name="exp_company"]').value || '';
+            const expLoc = document.querySelector('.resume-builder-form input[name="exp_location"]').value || '';
+            const expStart = document.querySelector('.resume-builder-form input[name="exp_start"]').value || '';
+            const expEnd = document.querySelector('.resume-builder-form input[name="exp_end"]').value || '';
+            const expAch = document.querySelector('.resume-builder-form textarea[name="exp_achievements"]').value || '';
+            if (expJob || expCompany || expAch) {
+                experience.push({
+                    job_title: expJob,
+                    company: expCompany,
+                    location: expLoc,
+                    start_date: expStart,
+                    end_date: expEnd,
+                    current: /present/i.test(expEnd),
+                    achievements: expAch
+                });
+            }
+
+            // Collect education (single entry for now)
+            const eduDegree = document.querySelector('.resume-builder-form input[name="edu_degree"]').value || '';
+            const eduMajor = document.querySelector('.resume-builder-form input[name="edu_major"]').value || '';
+            const eduUniv = document.querySelector('.resume-builder-form input[name="edu_university"]').value || '';
+            const eduYear = document.querySelector('.resume-builder-form input[name="edu_year"]').value || '';
+            const eduGpa = document.querySelector('.resume-builder-form input[name="edu_gpa"]').value || '';
+            const eduAch = document.querySelector('.resume-builder-form textarea[name="edu_achievements"]').value || '';
+            if (eduDegree || eduUniv) {
+                education.push({
+                    degree: eduDegree,
+                    major: eduMajor,
+                    university: eduUniv,
+                    graduation_year: eduYear,
+                    gpa: eduGpa,
+                    achievements: eduAch
+                });
+            }
+
+            // Collect skills (comma-separated to array)
+            const tech = document.querySelector('.resume-builder-form input[name="technical_skills"]').value || '';
+            const soft = document.querySelector('.resume-builder-form input[name="soft_skills"]').value || '';
+            const toolsInput = document.querySelector('.resume-builder-form input[name="tools"]').value || '';
+            const splitToArray = (str) => str.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
+            skills.technical_skills = splitToArray(tech);
+            skills.soft_skills = splitToArray(soft);
+            skills.tools = splitToArray(toolsInput);
+            
+            // For now, return basic structure - in a real implementation, you'd collect all form data
+            return {
+                personal_info: personalInfo,
+                summary: summary,
+                experience: experience,
+                education: education,
+                skills: skills,
+                projects: projects,
+                template: 'modern',
+                use_ai: document.getElementById('useAiEnhance')?.checked === true
+            };
+        }
+        
+        function displayGeneratedResume(resumeContent, downloadUrl) {
+            // Create a modal to display the generated resume
+            const modal = document.createElement('div');
+            modal.className = 'modal fade';
+            modal.innerHTML = `
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Generated Resume</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="resume-preview">
+                                <pre style="white-space: pre-wrap; font-family: 'Courier New', monospace; font-size: 12px; line-height: 1.4;">${resumeContent.formatted_resume}</pre>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="downloadResume()" data-download-url="${downloadUrl || ''}">
+                                <i class="fas fa-download me-2"></i>Download Resume
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            const bsModal = new bootstrap.Modal(modal);
+            bsModal.show();
+            
+            // Clean up modal when closed
+            modal.addEventListener('hidden.bs.modal', () => {
+                document.body.removeChild(modal);
+            });
+        }
+        
+        function downloadResume() {
+            // Get the download URL from the resume generation result
+            const downloadUrl = document.querySelector('.modal-footer .btn-primary').getAttribute('data-download-url');
+            if (downloadUrl) {
+                // Create a temporary link to download the file
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = downloadUrl.split('/').pop();
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('No resume file available for download. Please generate a resume first.');
+            }
+        }
+        
+        function previewTemplate(templateName) {
+            alert(`Previewing ${templateName} template. This will open a preview window showing the template design.`);
+        }
+        
+        function downloadTemplate(templateName) {
+            alert(`Downloading ${templateName} template. This will download the template file to your device.`);
+        }
+        
+        function analyzeResume() {
+            alert('Resume analysis feature coming soon! This will analyze your resume for ATS optimization and keyword matching.');
+        }
+        
+        function checkFormat() {
+            alert('Format checking feature coming soon! This will verify your resume format is ATS-compatible.');
+        }
+        
+        function matchResume() {
+            const fileInput = document.getElementById('jobDescriptionFile');
+            if (fileInput.files.length === 0) {
+                alert('Please select a job description file first.');
+                return;
+            }
+            alert('Job matching feature coming soon! This will compare your resume against the job description.');
+        }
+        
+        function updateCharacterCount(textarea) {
+            const count = textarea.value.length;
+            const countElement = document.getElementById('summaryCount');
+            if (countElement) {
+                countElement.textContent = count;
+                if (count > 180) {
+                    countElement.style.color = 'red';
+                } else if (count > 150) {
+                    countElement.style.color = 'orange';
+                } else {
+                    countElement.style.color = 'inherit';
+                }
+            }
+        }
+        
+        // AI Skill Assessment Functions
+        let currentAssessmentSession = null;
+        
+        async function startSkillAssessment() {
+            try {
+                const response = await fetch('/api/assessment/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({})
+                });
+                
+                const result = await response.json();
+                
+                if (result.session_id) {
+                    currentAssessmentSession = result;
+                    displayAssessmentQuestion(result);
+                } else {
+                    alert('Error starting assessment: ' + (result.error || 'Unknown error'));
+                }
+                
+            } catch (error) {
+                alert('Error starting assessment: ' + error.message);
+            }
+        }
+        
+        function displayAssessmentQuestion(assessmentData) {
+            const container = document.getElementById('assessmentContainer');
+            
+            if (assessmentData.status === 'completed') {
+                displayAssessmentResults(assessmentData);
+                return;
+            }
+            
+            const question = assessmentData.question;
+            if (!question) {
+                container.innerHTML = '<div class="text-center"><h5>Assessment Complete!</h5></div>';
+                return;
+            }
+            
+            let optionsHtml = '';
+            if (question.type === 'scale') {
+                optionsHtml = question.options.map((option, index) => `
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer" value="${index}" id="option${index}">
+                        <label class="form-check-label" for="option${index}">${option}</label>
+                    </div>
+                `).join('');
+            } else if (question.type === 'multiple_choice') {
+                optionsHtml = question.options.map((option, index) => `
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="answer" value="${index}" id="option${index}">
+                        <label class="form-check-label" for="option${index}">${option}</label>
+                    </div>
+                `).join('');
+            } else if (question.type === 'checkbox') {
+                optionsHtml = question.options.map((option, index) => `
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="answer" value="${index}" id="option${index}">
+                        <label class="form-check-label" for="option${index}">${option}</label>
+                    </div>
+                `).join('');
+            }
+            
+            container.innerHTML = `
+                <div class="assessment-question">
+                    <div class="progress mb-4">
+                        <div class="progress-bar" style="width: ${assessmentData.progress.percentage}%">
+                            ${assessmentData.progress.percentage}%
+                        </div>
+                    </div>
+                    
+                    <div class="question-header mb-4">
+                        <h5>Phase: ${question.phase.replace('_', ' ').toUpperCase()}</h5>
+                        <h6>Question ${question.question_number} of ${question.total_in_phase}</h6>
+                    </div>
+                    
+                    <div class="question-content mb-4">
+                        <h5 class="question-text">${question.question}</h5>
+                    </div>
+                    
+                    <div class="question-options mb-4">
+                        ${optionsHtml}
+                    </div>
+                    
+                    <div class="question-actions">
+                        <button class="btn btn-primary btn-lg" onclick="submitAssessmentAnswer()">
+                            <i class="fas fa-arrow-right me-2"></i>Next Question
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        async function submitAssessmentAnswer() {
+            try {
+                const selectedOptions = document.querySelectorAll('input[name="answer"]:checked');
+                let answer;
+                
+                if (selectedOptions.length === 0) {
+                    alert('Please select an answer before proceeding.');
+                    return;
+                }
+                
+                if (selectedOptions.length === 1) {
+                    answer = parseInt(selectedOptions[0].value);
+                } else {
+                    answer = Array.from(selectedOptions).map(option => parseInt(option.value));
+                }
+                
+                const response = await fetch('/api/assessment/submit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: currentAssessmentSession.session_id,
+                        answer: answer
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.session_id) {
+                    currentAssessmentSession = result;
+                    displayAssessmentQuestion(result);
+                } else {
+                    alert('Error submitting answer: ' + (result.error || 'Unknown error'));
+                }
+                
+            } catch (error) {
+                alert('Error submitting answer: ' + error.message);
+            }
+        }
+        
+        function displayAssessmentResults(assessmentData) {
+            const container = document.getElementById('assessmentContainer');
+            const report = assessmentData.assessment_report;
+            const recommendations = assessmentData.recommendations;
+            
+            container.innerHTML = `
+                <div class="assessment-results">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+                        <h4>Assessment Complete!</h4>
+                        <p class="text-muted">Your overall skill score: <strong>${report.overall_score}%</strong></p>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6><i class="fas fa-star me-2"></i>Your Strengths</h6>
+                                </div>
+                                <div class="card-body">
+                                    ${report.strengths.map(strength => `
+                                        <span class="badge bg-success me-2 mb-2">${strength}</span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6><i class="fas fa-target me-2"></i>Areas for Improvement</h6>
+                                </div>
+                                <div class="card-body">
+                                    ${report.weaknesses.map(weakness => `
+                                        <span class="badge bg-warning me-2 mb-2">${weakness}</span>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6><i class="fas fa-route me-2"></i>Recommended Career Paths</h6>
+                                </div>
+                                <div class="card-body">
+                                    ${recommendations.career_paths.map(career => `
+                                        <div class="mb-2">
+                                            <i class="fas fa-briefcase me-2"></i>${career}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h6><i class="fas fa-list-check me-2"></i>Next Steps</h6>
+                                </div>
+                                <div class="card-body">
+                                    ${recommendations.next_steps.map(step => `
+                                        <div class="mb-2">
+                                            <i class="fas fa-check me-2"></i>${step}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary" onclick="useAssessmentResults()">
+                            <i class="fas fa-magic me-2"></i>Use Results for Career Analysis
+                        </button>
+                        <button class="btn btn-secondary ms-2" onclick="retakeAssessment()">
+                            <i class="fas fa-redo me-2"></i>Retake Assessment
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function useAssessmentResults() {
+            if (currentAssessmentSession && currentAssessmentSession.final_scores) {
+                // Convert assessment results to form data
+                const skills = Object.keys(currentAssessmentSession.final_scores)
+                    .filter(skill => currentAssessmentSession.final_scores[skill] >= 50);
+                
+                // Pre-fill the form with assessment results
+                skills.forEach(skill => {
+                    const checkbox = document.querySelector(`input[value="${skill}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                });
+                
+                // Hide assessment section and show form
+                document.getElementById('skillAssessmentSection').style.display = 'none';
+                document.getElementById('careerForm').scrollIntoView({ behavior: 'smooth' });
+                
+                alert('Assessment results have been applied to your profile! You can now submit the form for personalized career recommendations.');
+            }
+        }
+        
+        function retakeAssessment() {
+            currentAssessmentSession = null;
+            document.getElementById('assessmentContainer').innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-clipboard-check fa-3x text-success mb-3"></i>
+                    <h5>Comprehensive Skill Assessment</h5>
+                    <p class="text-muted">Take our AI-powered assessment to get personalized career recommendations</p>
+                    <button class="btn btn-success btn-lg" onclick="startSkillAssessment()">
+                        <i class="fas fa-play me-2"></i>Start Assessment
+                    </button>
+                </div>
+            `;
+        }
+        
+        function showSkillAssessment() {
+            document.getElementById('skillAssessmentSection').style.display = 'block';
+            document.getElementById('skillAssessmentSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // AI Interview Preparation Functions
+        let currentInterview = null;
+        let interviewAnswers = [];
+        let interviewStartTime = null;
+        
+        function startMockInterview() {
+            const interviewType = document.getElementById('interviewType').value;
+            const difficulty = document.getElementById('interviewDifficulty').value;
+            
+            // Show loading state
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="text-center py-4">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Preparing your mock interview...</p>
+                </div>
+            `;
+            
+            // Start interview
+            fetch('/api/interview/start', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    interview_type: interviewType,
+                    difficulty: difficulty,
+                    user_id: 'user_' + Date.now()
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.session_id) {
+                    currentInterview = data;
+                    interviewAnswers = [];
+                    interviewStartTime = Date.now();
+                    displayInterviewQuestion();
+                } else {
+                    showError('Failed to start interview: ' + data.error);
+                }
+            })
+            .catch(error => {
+                showError('Error starting interview: ' + error.message);
+            });
+        }
+        
+        function displayInterviewQuestion() {
+            if (!currentInterview || currentInterview.current_question >= currentInterview.questions.length) {
+                finishInterview();
+                return;
+            }
+            
+            const question = currentInterview.questions[currentInterview.current_question];
+            const questionNum = currentInterview.current_question + 1;
+            const totalQuestions = currentInterview.questions.length;
+            
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="interview-question">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Question ${questionNum} of ${totalQuestions}</h6>
+                        <span class="badge bg-warning text-dark">${question.category}</span>
+                    </div>
+                    
+                    <div class="question-card p-3 mb-3" style="background-color: #f8f9fa; border-left: 4px solid #ffc107;">
+                        <h6 class="mb-2">${question.question}</h6>
+                        ${question.context ? `<p class="text-muted small mb-0">${question.context}</p>` : ''}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Your Answer:</label>
+                        <textarea class="form-control" id="interviewAnswer" rows="4" 
+                                placeholder="Type your answer here..."></textarea>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <button class="btn btn-outline-secondary" onclick="skipQuestion()">
+                            <i class="fas fa-forward me-1"></i>Skip
+                        </button>
+                        <button class="btn btn-warning" onclick="submitInterviewAnswer()">
+                            <i class="fas fa-check me-1"></i>Submit Answer
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function submitInterviewAnswer() {
+            const answer = document.getElementById('interviewAnswer').value.trim();
+            
+            if (!answer) {
+                showError('Please provide an answer before submitting.');
+                return;
+            }
+            
+            const question = currentInterview.questions[currentInterview.current_question];
+            const answerData = {
+                question_id: question.id,
+                answer: answer,
+                time_taken: Date.now() - interviewStartTime
+            };
+            
+            interviewAnswers.push(answerData);
+            
+            // Show loading
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="text-center py-3">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Processing...</span>
+                    </div>
+                    <p class="mt-2">Processing your answer...</p>
+                </div>
+            `;
+            
+            // Submit answer
+            fetch('/api/interview/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: currentInterview.session_id,
+                    answer: answer
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.session_id) {
+                    currentInterview = data;
+                    displayInterviewQuestion();
+                } else {
+                    showError('Failed to submit answer: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                showError('Error submitting answer: ' + error.message);
+            });
+        }
+        
+        function skipQuestion() {
+            currentInterview.current_question++;
+            displayInterviewQuestion();
+        }
+        
+        function finishInterview() {
+            // Show loading
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="text-center py-3">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Analyzing...</span>
+                    </div>
+                    <p class="mt-2">Analyzing your interview performance...</p>
+                </div>
+            `;
+            
+            // Get interview insights
+            fetch(`/api/interview/insights/${currentInterview.user_id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayInterviewResults(data.insights);
+                } else {
+                    showError('Failed to get interview insights: ' + data.error);
+                }
+            })
+            .catch(error => {
+                showError('Error getting interview insights: ' + error.message);
+            });
+        }
+        
+        function displayInterviewResults(insights) {
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="interview-results">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-trophy fa-3x text-warning mb-3"></i>
+                        <h5>Interview Complete!</h5>
+                        <p class="text-muted">Here's your performance analysis</p>
+                    </div>
+                    
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="display-6 text-warning">${insights.overall_score}/100</div>
+                                <small class="text-muted">Overall Score</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="display-6 text-success">${insights.questions_answered}</div>
+                                <small class="text-muted">Questions Answered</small>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="display-6 text-info">${insights.average_time}s</div>
+                                <small class="text-muted">Avg Response Time</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Strengths:</h6>
+                        <ul class="list-unstyled">
+                            ${insights.strengths.map(strength => `<li><i class="fas fa-check text-success me-2"></i>${strength}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Areas for Improvement:</h6>
+                        <ul class="list-unstyled">
+                            ${insights.improvements.map(improvement => `<li><i class="fas fa-arrow-up text-warning me-2"></i>${improvement}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <h6>Recommendations:</h6>
+                        <div class="alert alert-info">
+                            <ul class="mb-0">
+                                ${insights.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-warning me-2" onclick="startMockInterview()">
+                            <i class="fas fa-redo me-1"></i>Take Another Interview
+                        </button>
+                        <button class="btn btn-outline-secondary" onclick="showInterviewHistory()">
+                            <i class="fas fa-history me-1"></i>View History
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function showInterviewHistory() {
+            // Show loading
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="text-center py-3">
+                    <div class="spinner-border text-warning" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading interview history...</p>
+                </div>
+            `;
+            
+            // Get interview history
+            fetch(`/api/interview/history/${currentInterview.user_id}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    displayInterviewHistory(data.history);
+                } else {
+                    showError('Failed to get interview history: ' + data.error);
+                }
+            })
+            .catch(error => {
+                showError('Error getting interview history: ' + error.message);
+            });
+        }
+        
+        function displayInterviewHistory(history) {
+            if (history.length === 0) {
+                document.getElementById('aiInterviewPrep').innerHTML = `
+                    <div class="text-center py-4">
+                        <i class="fas fa-history fa-2x text-muted mb-3"></i>
+                        <h6>No Interview History</h6>
+                        <p class="text-muted">Complete your first mock interview to see your history here.</p>
+                        <button class="btn btn-warning" onclick="startMockInterview()">
+                            <i class="fas fa-play me-1"></i>Start First Interview
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            let historyHtml = `
+                <div class="interview-history">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="mb-0">Interview History</h6>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="startMockInterview()">
+                            <i class="fas fa-plus me-1"></i>New Interview
+                        </button>
+                    </div>
+                    
+                    <div class="list-group">
+            `;
+            
+            history.forEach((interview, index) => {
+                const date = new Date(interview.date).toLocaleDateString();
+                const scoreColor = interview.overall_score >= 80 ? 'success' : 
+                                 interview.overall_score >= 60 ? 'warning' : 'danger';
+                
+                historyHtml += `
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">Interview #${index + 1}</h6>
+                                <p class="mb-1 text-muted small">${interview.interview_type} • ${interview.difficulty} • ${date}</p>
+                                <small class="text-muted">${interview.questions_answered} questions answered</small>
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-${scoreColor} fs-6">${interview.overall_score}/100</span>
+                                <div class="small text-muted">${interview.average_time}s avg</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            historyHtml += `
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('aiInterviewPrep').innerHTML = historyHtml;
+        }
+        
+        function showError(message) {
+            document.getElementById('aiInterviewPrep').innerHTML = `
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-triangle me-2"></i>${message}
+                    <button class="btn btn-sm btn-outline-danger ms-2" onclick="startMockInterview()">
+                        Try Again
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

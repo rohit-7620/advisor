@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Mock Interview Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 50px 0;
+        }
+        
+        .container-custom {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            border: none;
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .question-box {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .score-badge {
+            font-size: 48px;
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .evaluation-section {
+            margin-top: 20px;
+        }
+        
+        .badge-custom {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-custom">
+        <!-- Header -->
+        <div class="text-center text-white mb-4">
+            <h1><i class="fas fa-comments me-3"></i>Advanced Mock Interview</h1>
+            <p class="lead">Powered by Gemini AI 2.5 Flash</p>
+        </div>
+
+        <!-- API Status Card -->
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <button onclick="testAPI()" class="btn btn-gradient">
+                    <i class="fas fa-plug me-2"></i>Test API Connection
+                </button>
+                <div id="apiStatus" class="mt-3"></div>
+            </div>
+        </div>
+
+        <!-- Start Interview Card -->
+        <div class="card mb-4" id="startCard">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-play-circle me-2"></i>Start Interview</h4>
+            </div>
+            <div class="card-body">
+                <form id="startForm" onsubmit="startInterview(event)">
+                    <div class="mb-3">
+                        <label class="form-label">User ID</label>
+                        <input type="text" class="form-control" id="userId" value="user_demo_123" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select class="form-select" id="role" required>
+                            <option value="Software Engineer">Software Engineer</option>
+                            <option value="Data Scientist">Data Scientist</option>
+                            <option value="Product Manager">Product Manager</option>
+                            <option value="Full Stack Developer">Full Stack Developer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Difficulty</label>
+                        <select class="form-select" id="difficulty" required>
+                            <option value="easy">Easy</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="hard">Hard</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-gradient w-100">
+                        <i class="fas fa-rocket me-2"></i>Start Interview
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Interview Card -->
+        <div class="card mb-4 hidden" id="interviewCard">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-question-circle me-2"></i>Interview Question</h4>
+                <div class="mt-2">
+                    <span class="badge badge-custom bg-info" id="questionCounter">Question 1/5</span>
+                    <span class="badge badge-custom bg-success ms-2" id="difficultyBadge">Medium</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="question-box">
+                    <h5 class="mb-3">Question:</h5>
+                    <p id="questionText" class="fs-5"></p>
+                    <div class="mt-3">
+                        <small class="text-muted"><i class="fas fa-clock me-2"></i><span id="timeLimit">120</span> seconds</small>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Your Answer</label>
+                    <textarea id="answerText" class="form-control" rows="6" placeholder="Type your answer here..."></textarea>
+                </div>
+
+                <button onclick="submitAnswer()" class="btn btn-gradient w-100">
+                    <i class="fas fa-paper-plane me-2"></i>Submit Answer
+                </button>
+            </div>
+        </div>
+
+        <!-- Evaluation Card -->
+        <div class="card mb-4 hidden" id="evaluationCard">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i>Evaluation Results</h4>
+            </div>
+            <div class="card-body">
+                <div class="text-center mb-4">
+                    <div class="score-badge" id="scoreDisplay">0/10</div>
+                    <div class="text-muted">Your Score</div>
+                    <div class="mt-2">
+                        <span class="badge badge-custom bg-success" id="ratingBadge">Good</span>
+                    </div>
+                </div>
+
+                <div class="evaluation-section" id="evaluationDetails"></div>
+
+                <button onclick="nextQuestion()" class="btn btn-gradient w-100 mt-3" id="nextBtn">
+                    <i class="fas fa-arrow-right me-2"></i>Next Question
+                </button>
+            </div>
+        </div>
+
+        <!-- Final Report Card -->
+        <div class="card mb-4 hidden" id="finalReportCard">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="fas fa-trophy me-2"></i>Interview Complete!</h4>
+            </div>
+            <div class="card-body">
+                <div id="finalReportContent"></div>
+                <button onclick="resetInterview()" class="btn btn-gradient w-100 mt-3">
+                    <i class="fas fa-redo me-2"></i>Start New Interview
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSessionId = null;
+
+        async function testAPI() {
+            const statusDiv = document.getElementById('apiStatus');
+            statusDiv.innerHTML = '<div class="spinner-border text-primary"></div>';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/interview/test-connection');
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong>API Connected!</strong><br>
+                            ${data.message}<br>
+                            <small>Response: ${data.response}</small>
+                        </div>
+                    `;
+                } else {
+                    statusDiv.innerHTML = `
+                        <div class="alert alert-danger">
+                            <i class="fas fa-times-circle me-2"></i>
+                            <strong>API Error:</strong><br>
+                            ${data.error}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Connection Error:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function startInterview(event) {
+            event.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const role = document.getElementById('role').value;
+            const difficulty = document.getElementById('difficulty').value;
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/interview/start-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId, role: role, difficulty: difficulty })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentSessionId = data.session_id;
+                    
+                    // Hide start card, show interview card
+                    document.getElementById('startCard').classList.add('hidden');
+                    document.getElementById('interviewCard').classList.remove('hidden');
+                    
+                    // Display first question
+                    displayQuestion(data.first_question.question_data);
+                    
+                    document.getElementById('difficultyBadge').textContent = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+                } else {
+                    alert('Error starting interview: ' + data.error);
+                }
+            } catch (error) {
+                alert('Connection error: ' + error.message);
+            }
+        }
+
+        function displayQuestion(questionData) {
+            document.getElementById('questionText').textContent = questionData.question;
+            document.getElementById('timeLimit').textContent = questionData.time_limit || 120;
+            document.getElementById('questionCounter').textContent = `Question ${questionData.question_number}/5`;
+            document.getElementById('answerText').value = '';
+        }
+
+        async function submitAnswer() {
+            const answer = document.getElementById('answerText').value.trim();
+            
+            if (!answer) {
+                alert('Please provide an answer');
+                return;
+            }
+            
+            if (!currentSessionId) {
+                alert('No active session');
+                return;
+            }
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/interview/submit-answer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ session_id: currentSessionId, answer: answer })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Hide interview card, show evaluation card
+                    document.getElementById('interviewCard').classList.add('hidden');
+                    document.getElementById('evaluationCard').classList.remove('hidden');
+                    
+                    // Display evaluation
+                    displayEvaluation(data.evaluation, data.interview_continues, data.interview_complete, data.next_question, data.final_report);
+                } else {
+                    alert('Error submitting answer: ' + data.error);
+                }
+            } catch (error) {
+                alert('Connection error: ' + error.message);
+            }
+        }
+
+        function displayEvaluation(evaluation, continues, complete, nextQuestion, finalReport) {
+            document.getElementById('scoreDisplay').textContent = `${evaluation.score || 0}/${evaluation.out_of || 10}`;
+            document.getElementById('ratingBadge').textContent = evaluation.rating || 'Average';
+            
+            let detailsHTML = '';
+            
+            if (evaluation.strengths) {
+                detailsHTML += `
+                    <h6><i class="fas fa-thumbs-up me-2 text-success"></i>Strengths</h6>
+                    <ul>
+                        ${evaluation.strengths.slice(0, 3).map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                `;
+            }
+            
+            if (evaluation.weaknesses) {
+                detailsHTML += `
+                    <h6><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Areas for Improvement</h6>
+                    <ul>
+                        ${evaluation.weaknesses.slice(0, 3).map(w => `<li>${w}</li>`).join('')}
+                    </ul>
+                `;
+            }
+            
+            if (evaluation.detailed_feedback) {
+                detailsHTML += `
+                    <h6><i class="fas fa-comment me-2 text-info"></i>Detailed Feedback</h6>
+                    <p>${evaluation.detailed_feedback}</p>
+                `;
+            }
+            
+            document.getElementById('evaluationDetails').innerHTML = detailsHTML;
+            
+            // Store next question data
+            if (continues && nextQuestion) {
+                window.nextQuestionData = nextQuestion.question_data;
+                document.getElementById('nextBtn').innerHTML = '<i class="fas fa-arrow-right me-2"></i>Next Question';
+            } else if (complete) {
+                document.getElementById('nextBtn').innerHTML = '<i class="fas fa-flag-checkered me-2"></i>View Final Report';
+                window.finalReportData = finalReport;
+            }
+        }
+
+        function nextQuestion() {
+            if (window.nextQuestionData) {
+                // Show interview card, hide evaluation
+                document.getElementById('evaluationCard').classList.add('hidden');
+                document.getElementById('interviewCard').classList.remove('hidden');
+                
+                // Display next question
+                displayQuestion(window.nextQuestionData);
+                window.nextQuestionData = null;
+            } else if (window.finalReportData) {
+                // Show final report
+                document.getElementById('evaluationCard').classList.add('hidden');
+                document.getElementById('finalReportCard').classList.remove('hidden');
+                
+                displayFinalReport(window.finalReportData);
+            }
+        }
+
+        function displayFinalReport(report) {
+            let reportHTML = `
+                <div class="text-center mb-4">
+                    <div class="score-badge">${report.overall_score || 0}/10</div>
+                    <div class="text-muted">Overall Performance</div>
+                    <div class="mt-2">
+                        <span class="badge badge-custom bg-primary">${report.performance_rating || 'Average'}</span>
+                        <span class="badge badge-custom bg-success ms-2">${report.recommendation || 'N/A'}</span>
+                    </div>
+                </div>
+                
+                <h6><i class="fas fa-star me-2 text-warning"></i>Key Strengths</h6>
+                <ul>
+                    ${(report.strengths || []).map(s => `<li>${s}</li>`).join('')}
+                </ul>
+                
+                <h6><i class="fas fa-chart-line me-2 text-info"></i>Areas for Improvement</h6>
+                <ul>
+                    ${(report.areas_for_improvement || []).map(a => `<li>${a}</li>`).join('')}
+                </ul>
+                
+                <h6><i class="fas fa-tasks me-2 text-success"></i>Next Steps</h6>
+                <ul>
+                    ${(report.next_steps || []).map(n => `<li>${n}</li>`).join('')}
+                </ul>
+                
+                ${report.detailed_summary ? `
+                    <h6><i class="fas fa-file-alt me-2"></i>Summary</h6>
+                    <p>${report.detailed_summary}</p>
+                ` : ''}
+            `;
+            
+            document.getElementById('finalReportContent').innerHTML = reportHTML;
+        }
+
+        function resetInterview() {
+            currentSessionId = null;
+            window.nextQuestionData = null;
+            window.finalReportData = null;
+            
+            document.getElementById('finalReportCard').classList.add('hidden');
+            document.getElementById('startCard').classList.remove('hidden');
+            
+            // Reset form
+            document.getElementById('startForm').reset();
+        }
+    </script>
+</body>
+</html>
