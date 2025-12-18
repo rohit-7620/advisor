@@ -158,5 +158,7 @@ def learning_path():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# Export app for Vercel
-# Vercel will automatically use the 'app' Flask instance
+# Vercel serverless function handler
+# This is the entry point for Vercel
+if __name__ == "__main__":
+    app.run()
